@@ -1,0 +1,33 @@
+.column-settings{
+    display:none;
+}
+
+th:hover .column-settings{
+    display:block;
+}
+
+.header-settings-options{
+    display:block;
+}
+
+.dialogRow{
+    top: 15pc;
+    position: absolute;
+
+}
+
+.header-settings-options-dialog{
+    border: 1px solid grey;
+background-color: white;
+z-index: 100;
+    }
+
+.hidden{
+    display:none;
+}
+
+.caption{
+  font-size:150%;
+  text-align: center;
+  font-weight: bold;
+}
