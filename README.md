@@ -4,13 +4,17 @@ TableTwo is a Bootstrap compatible jQuery plugin that easily turns any html tabl
 
 For tableTwo elements to render the following two files must be included:
 
-tableTwo.js
-tableTwo.css
+  tableTwo.js
+  tableTwo.css
 
 Tables can then be initiated using jQuery selectors as shown below:
 
     $('#elementToTableify').tableTwo();
     $('.elementsToTableify').tableTwo();
+
+Some elements of tableTwo (such as the toggle buttons and column options menu) also use font awesome icons which can be found here:
+
+    http://fontawesome.io
 
 tableTwo JSON works best using the following html table format:
 
@@ -28,11 +32,12 @@ if using static data tableTwo is farely forgiving with html formatting.
 
     #changes
     added readme file, amended json send function.
+    added toggle button column types
 
     #currently in development
     event bindings for functions
     font edit menu
-    radio button column types
+    toggle button column types - completed
     date column types
 
     #current development cycle
@@ -53,7 +58,6 @@ TableTwo uses a number of default options all of which can be overloaded, these 
     showColumnOptions:true,
     allowDropdown:true,
     editHeaders:true,
-    background: "white",
     showTableCaption: true,
     tableCaptionValue: "",
     submitTable:false,

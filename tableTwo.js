@@ -394,7 +394,9 @@ sendJsonData(opts.sendJsonUrl,data);
 
                             if (item.type == "select"){
                                 $(this).removeClass();
+                                $(this).remove('.toggleId');
                                 $(this).addClass(item.type);
+
 
                               if ($(this).find(".selectId").length){
                                   $(this).find(".selectId").val(item.id);
@@ -406,10 +408,27 @@ sendJsonData(opts.sendJsonUrl,data);
                                 }
                             }
 
+                            if (item.type == "toggle"){
+                              $(this).removeClass();
+                              $(this).remove('.selectId');
+                              $(this).addClass(item.type);
+
+                              if ($(this).find(".toggleId").length){
+                                  $(this).find(".toggleId").val(item.id);
+                              }else{
+
+                                  html = '<input type="hidden" class="toggleId" value="' + item.id + '">';
+                                  $(this).append(html);
+
+                                }
+
+                            }
+
                             if (item.type == "text"){
                               $(this).removeClass();
                               $(this).addClass(item.type);
                               $(this).remove('.selectId');
+
 
 
                             }
@@ -539,15 +558,34 @@ sendJsonData(opts.sendJsonUrl,data);
               });
 
               html += '</select>';
-            }else{
-              html += '<input type="text" class="form-control" value="' + value + '"/>';
-
+              html += '<span class="input-group-btn">';
+              html += '<button class="btn btn-primary confirm">+</button>';
+              html += '</span>';
+              html += '</div>';
             }
 
-            html += '<span class="input-group-btn">';
-            html += '<button class="btn btn-primary confirm">+</button>';
-            html += '</span>';
-            html += '</div>';
+            if ($(element, "tr:first").find("th:nth-child(" + (position) + ")").hasClass("toggle")){
+
+              id = $(element, "tr:first").find("th:nth-child(" + position + ")").find(".toggleId").val();
+
+              $.each(opts.columnTypes, function(i,item){
+                if (item.id == id){
+                  html += '<button class="btn btn-primary toggleButton toggle-off"><i  class="' + item.off + '"></i></button>';
+                  html += '</div>';
+                  }
+              });
+
+
+
+            }else{
+              html += '<input type="text" class="form-control" value="' + value + '"/>';
+              html += '<span class="input-group-btn">';
+              html += '<button class="btn btn-primary confirm">+</button>';
+              html += '</span>';
+              html += '</div>';
+            }
+
+
 
             $(this).html(html);
 
@@ -560,6 +598,39 @@ sendJsonData(opts.sendJsonUrl,data);
          }
        });
 
+       $(element, "button").on("click", ".toggleButton", function(){
+
+         position = $(this).closest("td").index() + 1;
+         id = $(element).find("tr:first").find("th:nth-child(" + position + ")").find(".toggleId").val();
+
+
+         if($(this).hasClass("toggle-off")){
+
+           $.each(opts.columnTypes, function(i,item){
+             if (item.id == id){
+               html = '<i  class="' + item.on + '"></i>';
+               }
+           });
+
+           $(this).removeClass("toggle-off");
+           $(this).addClass("toggle-on");
+         }else{
+
+           $(this).removeClass("toggle-on");
+
+           $.each(opts.columnTypes, function(i,item){
+             if (item.id == id){
+               html = '<i  class="' + item.off + '"></i>';
+
+               }
+           });
+           $(this).addClass("toggle-off");
+
+         }
+
+         $(this).html(html);
+
+       });
 
 
        $(element, "td").on("keydown", "input", function(event){
@@ -862,18 +933,25 @@ $.fn.tableTwo.defaults = {
             type: "text",
             value: ""
           },
-          //select example
-          select:{
-            id:2,
-            title:"select",
-            type: "select",
-            values: [ '']
-          },
+          // //select example
+          // select:{
+          //   id:2,
+          //   title:"select",
+          //   type: "select",
+          //   values: [ '']
+          // },
           status:{
             id:3,
             title:"status",
             type:"select",
             values: [ 'created','started','done']
-            }
+          },
+          favourite:{
+            id:4,
+            title:"done",
+            type:"toggle",
+            on:"fa fa-star-o",
+            off:"fa fa-star"
+          }
         }
 };
