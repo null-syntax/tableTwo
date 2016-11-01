@@ -18,11 +18,13 @@ Some elements of tableTwo (such as the toggle buttons and column options menu) a
 
 tableTwo JSON works best using the following html table format:
 
+```html
   <div class="table-responsive">
    <table class="table table-condensed">
        <tbody>
      </tbody></table>
   </div>
+  ```
 
 if using static data tableTwo is farely forgiving with html formatting.
 
