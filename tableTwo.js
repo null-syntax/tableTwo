@@ -422,6 +422,12 @@ sendJsonData(opts.sendJsonUrl,data);
 
                                 }
 
+
+                              html = '<button class="btn btn-primary toggleButton toggle-off"><i  class="' + item.off + '"></i></button>';
+
+                              $(element, "tr:first").find("td:nth-child(" + columnId + ")").html(html);
+
+
                             }
 
                             if (item.type == "text"){
@@ -527,6 +533,10 @@ sendJsonData(opts.sendJsonUrl,data);
 
            position = $(this).index() - $(this.active).index();
 
+           if (!$(element, "tr:first").find("th:nth-child(" + position + ")").hasClass("toggle")){
+
+
+
 
            if (position == 1 && opts.showRowId == true ){
            }else{
@@ -562,21 +572,6 @@ sendJsonData(opts.sendJsonUrl,data);
               html += '<button class="btn btn-primary confirm">+</button>';
               html += '</span>';
               html += '</div>';
-            }
-
-            if ($(element, "tr:first").find("th:nth-child(" + (position) + ")").hasClass("toggle")){
-
-              id = $(element, "tr:first").find("th:nth-child(" + position + ")").find(".toggleId").val();
-
-              $.each(opts.columnTypes, function(i,item){
-                if (item.id == id){
-                  html += '<button class="btn btn-primary toggleButton toggle-off"><i  class="' + item.off + '"></i></button>';
-                  html += '</div>';
-                  }
-              });
-
-
-
             }else{
               html += '<input type="text" class="form-control" value="' + value + '"/>';
               html += '<span class="input-group-btn">';
@@ -596,6 +591,7 @@ sendJsonData(opts.sendJsonUrl,data);
 }
            }
          }
+       }
        });
 
        $(element, "button").on("click", ".toggleButton", function(){
@@ -794,6 +790,19 @@ sendJsonData(opts.sendJsonUrl,data);
 
 
                   html += '</td>';
+                }
+
+                if($(item).hasClass("toggle")){
+
+                  html += '<td>';
+                  id = $(item).find(".toggleId").val();
+
+                  $.each(opts.columnTypes, function(i,item){
+                    if (item.id == id){
+                        html += '<button class="btn btn-primary toggleButton toggle-off"><i class="' + item.off + '" ></i></button>';
+                    }
+                  });
+                    html += '</td>';
 
                 }else{
 
@@ -896,6 +905,10 @@ sendJsonData(opts.sendJsonUrl,data);
                  $(element).find("tr:last").prev("tr").find("td:last").html(html);
                }
 
+               if (opts.showRowId){
+                 createRowId(element);
+               }
+
             });
 
 
@@ -910,7 +923,7 @@ $.fn.tableTwo.defaults = {
     addRow: true,
     addColumn: true,
     removeRow:true,
-    showRowId:false,
+    showRowId:true,
     editCells:true,
     showColumnOptions:true,
     allowDropdown:true,
@@ -933,7 +946,7 @@ $.fn.tableTwo.defaults = {
             type: "text",
             value: ""
           },
-          // //select example
+          // //select examples
           // select:{
           //   id:2,
           //   title:"select",
@@ -946,12 +959,27 @@ $.fn.tableTwo.defaults = {
             type:"select",
             values: [ 'created','started','done']
           },
-          favourite:{
+          //toggle examples
+          star:{
             id:4,
-            title:"done",
+            title:"star",
             type:"toggle",
             on:"fa fa-star-o",
             off:"fa fa-star"
+          },
+          check:{
+            id:5,
+            title:"done",
+            type:"toggle",
+            on: "fa fa-check",
+            off: "fa fa-times"
+          },
+          switch:{
+            id:6,
+            title:"switch",
+            type:"toggle",
+            on: "fa fa-toggle-on",
+            off: "fa fa-toggle-off"
           }
         }
 };
