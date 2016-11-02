@@ -161,9 +161,48 @@ sendJsonData(opts.sendJsonUrl,data);
           $.each(item,function(n,v){
             $.each(v, function(nn,vv){
 
-              headers += '<th>' + nn  + '</th>';
+              if (opts.enableColumnSettings){
 
-              cells += '<td>' + vv + '</td>';
+              columnMatch = false;
+              $.each(opts.columnSettings, function(key,item){
+                if (key == nn ){
+              columnMatch = true;
+                  if (opts.columnTypes[item].type == "toggle"){
+
+                    vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.columnTypes[item].off + '"></i></button>';
+
+                    nn += '<input type="hidden" class="toggleId" value="' + opts.columnTypes[item].id + '">';
+
+                    headers += '<th class="toggle">' + nn  + '</th>';
+
+
+                    cells += '<td>' + vv + '</td>';
+
+                  }
+                  if (opts.columnTypes[item].type == "select"){
+
+                    headers += '<th class="select">' + nn  + '</th>';
+
+                    cells += '<td>' + vv + '</td>';
+
+                  }
+
+
+                  }
+
+                });
+                if (columnMatch == false){
+                  headers += '<th>' + nn  + '</th>';
+
+                  cells += '<td>' + vv + '</td>';
+
+                }
+              }else{
+
+                headers += '<th>' + nn  + '</th>';
+
+                cells += '<td>' + vv + '</td>';
+              }
 
             });
 
@@ -692,7 +731,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
           if (opts.addRow == true){
 
-          html = '<button type="button" class="btn btn-block btn-primary add-column" style="">+</button>';
+          html = '<button type="button" class="btn btn-block btn-primary addColumn" style="">+</button>';
 
           $(th).html(html);
 
@@ -717,9 +756,10 @@ sendJsonData(opts.sendJsonUrl,data);
 
           }
 
-       $(element, "tr").on("click", ".addColumn", function(){
+       $("tr:first", element).on("click", ".addColumn", function(){
 
             $(element).find("tr").each(function(i,item){
+
 
             if(i == 0){
                 html = '<th>';
@@ -733,15 +773,15 @@ sendJsonData(opts.sendJsonUrl,data);
             }
 
 
-            $(element).find("tr:last").find("td").each(function(i,item){
-
-                count = $(element).find("tr:last").find("td").length;
-
-                if (i != 0 && i < count - 1){
-                    html = '<input type="text" class="form-control">';
-                    $(item).html(html);
-                }
-            });
+            // $(element).find("tr:last").find("td").each(function(i,item){
+            //
+            //     count = $(element).find("tr:last").find("td").length;
+            //
+            //     if ( != 0 && i < count - 1){
+            //         html = '<input type="text" class="form-control">';
+            //         $(item).html(html);
+            //     }
+            // });
 
 
        });
@@ -750,6 +790,9 @@ sendJsonData(opts.sendJsonUrl,data);
               createColumnOptions(element);
           }
 
+          if(opts.addRow){
+            createAddRow(element);
+          }
 
        });
 
@@ -766,12 +809,12 @@ sendJsonData(opts.sendJsonUrl,data);
 
             html = '<tr class="add-row">';
 
-            totalRows = $("tr:first", element).find("th").length - 1;
+            totalColumns = $("tr:first", element).find("th").length - 1;
 
             $("tr:first", element).find("th").each(function(i,item){
-              if (!$(item).hasClass("add-row-header")){
+              if ($(item).hasClass("add-row-header")){
 
-                if ($(item).hasClass("select")){
+              }else if ($(item).hasClass("select")){
                   html += '<td>';
                   id = $(item).find(".selectId").val();
 
@@ -779,20 +822,13 @@ sendJsonData(opts.sendJsonUrl,data);
 
                   $.each(opts.columnTypes, function(i,item){
                     if (item.id == id){
-
                     $.each(item.values,function(ii,iitem){
-
                         html += '<option>' + iitem + '</option>';
                     });
                   }
-
                   });
-
-
                   html += '</td>';
-                }
-
-                if($(item).hasClass("toggle")){
+                }else if($(item).hasClass("toggle")){
 
                   html += '<td>';
                   id = $(item).find(".toggleId").val();
@@ -803,6 +839,11 @@ sendJsonData(opts.sendJsonUrl,data);
                     }
                   });
                     html += '</td>';
+
+                }else if($(item).hasClass("row-id")){
+                    id = parseInt($(element).find("tr:last").find("td:first").html()) + 1;
+                    html += '<td>' + id + '</td>';
+
 
                 }else{
 
@@ -815,7 +856,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
                     html += '</td>';
                   }
-                  }
+
                     });
 
             html += '</tr>';
@@ -824,8 +865,9 @@ sendJsonData(opts.sendJsonUrl,data);
 
 
             $(element).find("tr").each(function(i,item){
-
+                  if ($(item).find("th:last").hasClass("add-row-header")){
                 if(i == 0){
+
                     html = '<th class="add-row-header">';
                     html += '</th>';
 
@@ -835,35 +877,38 @@ sendJsonData(opts.sendJsonUrl,data);
                     html = '<td></td>';
                     $(item).find("td:last").after(html);
                 }
+}
             });
 
             html = '<button type="button" class="btn btn-block btn-primary addRow" style="">+</button>';
 
             $(element).find("tr:last").find("td:last").html(html);
 
-            $(element, "tr").on("click", ".addRow", function(){
+
+
+
+            $("tr", element).on("click", ".addRow", function(){
 
                 html = '<tr>';
-
                     if (opts.showRowId == true){
-
                             $(element).find("tr:last").find("td").each(function(i,item){
-
                             html += '<td>';
-
                                 if (i == 0){
+                                    value = $(item).html();
+                                    html += value;
+                                }else{
+                                  if($("tr:first", element).find("th:nth-child(" + (i + 1) + ")").hasClass("toggle")){
 
                                     value = $(item).html();
                                     html += value;
 
-                                }else{
+                                  }else{
 
                                     value = $(item).find("input").val();
                                     if (value){
-
-                                html += value;
-
+                                      html += value;
                                     }
+                                  }
 
                                 }
 
@@ -928,15 +973,17 @@ $.fn.tableTwo.defaults = {
     showColumnOptions:true,
     allowDropdown:true,
     editHeaders:true,
-    background: "white",
     showTableCaption: true,
     tableCaptionValue: "",
     submitTable:true,
-    submitUrl:"http://bla.bla/bla",
+    submitUrl:"",
     getJsonData:true,
     sendJsonUrl:"",
     //jsonurl:"http://ip.jsontest.com/",
     jsonurl:"http://devlinux/users/lists/retrieveLists.php",
+        enableColumnSettings: true,
+        columnSettings:{"title":"status","budget":"star","project":"switch"},
+
 
         columnTypes:{
           //text example
