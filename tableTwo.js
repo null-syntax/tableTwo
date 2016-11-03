@@ -15,12 +15,12 @@
 
  function loadOptions(element){
 
-   if (opts.addRow){
-        createAddRow(element);
-   }
-
    if (opts.addColumn){
        createAddColumn(element);
+   }
+
+   if (opts.addRow){
+        createAddRow(element);
    }
 
    if(opts.removeRow){
@@ -125,23 +125,54 @@ sendJsonData(opts.sendJsonUrl,data);
   }
 
   function createRemoveRow(element){
-    totalRows = $(element).find("tr").length - 1;
-    totalColumns = $(element, "tr:first").find("th").length;
 
-    $(element).find("tr").each(function(i,item){
+    if (!opts.addColumn){
+      if (!opts.addRow){
+        html = '<th></th>';
+        $("tr:first", element).find("th:last").after(html);
+          html = '<td></td>';
+        $(element).find("tr").each(function(i,item){
+          $(item).find("td:last").after(html);
+        });
+      }else{
+        $("tr:first", element).find("th:last").addClass("remove-row-header");
 
-      if (i != 0){
-        if (i == totalRows && opts.addRow){
-        }else{
+        totalRows = $(element).find("tr").length - 1;
 
-          html = '<button type="button" class="btn btn block btn-danger removeRow" style="width:100%;"> X </button>';
-          $(item).find("td:nth-child(" + totalColumns + ")").html(html);
+        $(element).find("tr").each(function(i,item){
 
-        }
+          if (i != 0){
+            if (i == totalRows && opts.addRow){
+            }else{
+
+              html = '<td><button type="button" class="btn btn block btn-danger removeRow" style="width:100%;"> X </button></td>';
+              $(item).find("td:last").after(html);
+
+            }
+          }
+        });
       }
-    });
+    }else{
+      $("tr:first", element).find("th:last").addClass("remove-row-header");
 
-    $(element, "tr").on("click", ".removeRow", function(){
+      totalRows = $(element).find("tr").length - 1;
+
+      $(element).find("tr").each(function(i,item){
+
+        if (i != 0){
+          if (i == totalRows && opts.addRow){
+          }else{
+
+            html = '<button type="button" class="btn btn block btn-danger removeRow" style="width:100%;"> X </button>';
+            $(item).find("td:last").html(html);
+
+          }
+        }
+      });
+
+    }
+
+    $(element).on("click", ".removeRow", function(){
       $(this).closest("tr").remove();
       if (opts.showRowId){
         createRowId(element);
@@ -726,22 +757,22 @@ sendJsonData(opts.sendJsonUrl,data);
 
 
    function createAddColumn(element){
+          if ($("tr:first", element).find("tr:first").find("th:last").hasClass("add-column-header")){
+            $(element).find("tr").find("td:last").each(function(i,item){
+                $(this).remove();
+            });
+              $("tr:first", element).find("th:last").remove();
+          }
+
+
 
          th = $(element).find("tr:first").find("th:last");
 
-          if (opts.addRow == true){
-
-          html = '<button type="button" class="btn btn-block btn-primary addColumn" style="">+</button>';
-
-          $(th).html(html);
-
-
-          }else{
 
            $(element).find("tr").each(function(i,item){
 
                 if(i == 0){
-                    html = '<th class="col-xs-1 col-md-1 add-column">';
+                    html = '<th class="col-xs-1 col-md-1 add-column-header">';
                     html += '<button type="button" class="btn btn-block btn-primary addColumn" style="">+</button>';
                     html += '</th>';
 
@@ -754,7 +785,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
        });
 
-          }
+
 
        $("tr:first", element).on("click", ".addColumn", function(){
 
@@ -803,6 +834,12 @@ sendJsonData(opts.sendJsonUrl,data);
 
         function createAddRow(element){
 
+          if (!opts.addColumn){
+            html = '<th class="add-row-header"></th>';
+            $("tr:first", element).find("th:last").after(html);
+          }
+
+
             if ($("tr:last", element).hasClass("add-row")){
               $("tr:last", element).remove();
             }
@@ -813,6 +850,8 @@ sendJsonData(opts.sendJsonUrl,data);
 
             $("tr:first", element).find("th").each(function(i,item){
               if ($(item).hasClass("add-row-header")){
+                html += '<td></td>';
+
 
               }else if ($(item).hasClass("select")){
                   html += '<td>';
@@ -863,22 +902,24 @@ sendJsonData(opts.sendJsonUrl,data);
 
             $(element).find("tr:last").after(html);
 
+              $(element).find("tr:first").find("th:last").addClass("add-row-header");
 
-            $(element).find("tr").each(function(i,item){
-                  if ($(item).find("th:last").hasClass("add-row-header")){
-                if(i == 0){
 
-                    html = '<th class="add-row-header">';
-                    html += '</th>';
-
-                    $(item).find("th:last").after(html);
-
-                }else{
-                    html = '<td></td>';
-                    $(item).find("td:last").after(html);
-                }
-}
-            });
+            // $(element).find("tr").find("th:last").each(function(i,item){
+            //       if ($(item).find("th:last").hasClass("add-row-header")){
+            //
+            //
+            //         html = '<th class="add-row-header">';
+            //         html += '</th>';
+            //
+            //         $(item).find("th:last").after(html);
+            //
+            //     }else{
+            //         html = '<td></td>';
+            //         $(item).find("td:last").after(html);
+            //     }
+            //
+            // });
 
             html = '<button type="button" class="btn btn-block btn-primary addRow" style="">+</button>';
 
@@ -965,8 +1006,8 @@ sendJsonData(opts.sendJsonUrl,data);
 
    // Plugin defaults – added as a property on our plugin function.
 $.fn.tableTwo.defaults = {
-    addRow: true,
     addColumn: true,
+    addRow: true,
     removeRow:true,
     showRowId:true,
     editCells:true,
@@ -975,12 +1016,11 @@ $.fn.tableTwo.defaults = {
     editHeaders:true,
     showTableCaption: true,
     tableCaptionValue: "",
-    submitTable:true,
+    submitTable:false,
     submitUrl:"",
-    getJsonData:true,
+    getJsonData:false,
     sendJsonUrl:"",
-    //jsonurl:"http://ip.jsontest.com/",
-    jsonurl:"http://devlinux/users/lists/retrieveLists.php",
+    jsonurl:"",
         enableColumnSettings: true,
         columnSettings:{"title":"status","budget":"star","project":"switch"},
 
