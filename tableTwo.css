@@ -1,3 +1,11 @@
+.condensed-hidden{
+  display:none;
+}
+
+.column-manager{
+  padding-right:1pc; 
+}
+
 .column-settings{
     display:none;
 }

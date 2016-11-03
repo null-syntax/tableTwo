@@ -29,25 +29,21 @@ tableTwo JSON works best using the following html table format:
 if using static data tableTwo is farely forgiving with html formatting.
 
     #latest update:
-    02/11/2016
+    03/11/2016
+    pre-release update, all functions work as expected but more are being added.
+    Please see the development list in the readme for more information.
 
-    added option 'enableColumnSettings' (bool) to enable non default column types.
-
-    added ability to set column types for both json and static data.
-    toggle data is not yet reported to the json send function and may be overwritten if you change the column types.
+    added option 'mobileCondensedView' (bool) to condense view for mobile devices.
+    added option array 'mobileDefaultColumns', these columns will remain by default in mobile view.
+    added popover menu to hide/show columns.
 
     added the above to the readme log.
-
-    added mobile mobile view to development list
-
-    created the change log.
-
 
 
 
     #currently in development
     date column types
-    mobile view
+    mobile view - started and added (basic)
     event bindings for functions
     font edit menu
     toggle button column types - completed - documented
@@ -63,69 +59,71 @@ if using static data tableTwo is farely forgiving with html formatting.
 
 TableTwo uses a number of default options all of which can be overloaded, these are listed below along with there default setting:
 
-  addRow: true,
-  addColumn: true,
-  removeRow:true,
-  showRowId:true,
-  editCells:true,
-  showColumnOptions:true,
-  allowDropdown:true,
-  editHeaders:true,
-  showTableCaption: true,
-  tableCaptionValue: "",
-  submitTable:true,
-  submitUrl:"",
-  getJsonData:true,
-  sendJsonUrl:"",
-  jsonurl:"",
-  enableColumnSettings: true,
-  columnSettings:{"title":"status","budget":"star","project":"switch"},
+addColumn: true,
+addRow: true,
+removeRow:true,
+showRowId:true,
+editCells:true,
+showColumnOptions:true,
+allowDropdown:true,
+editHeaders:true,
+showTableCaption: true,
+tableCaptionValue: "",
+submitTable:false,
+submitUrl:"",
+getJsonData:false,
+sendJsonUrl:"",
+jsonurl:"",
+mobileCondensedView: true,
+//mobileDefaultColumns: [],
+    enableColumnSettings: true,
+    columnSettings:{"title":"status","budget":"star","project":"switch"},
 
 
-      columnTypes:{
-        //text example
-        text:{
-          id:1,
-          title: "text",
-          type: "text",
-          value: ""
-        },
-        // //select examples
-        // select:{
-        //   id:2,
-        //   title:"select",
-        //   type: "select",
-        //   values: [ '']
-        // },
-        status:{
-          id:3,
-          title:"status",
-          type:"select",
-          values: [ 'created','started','done']
-        },
-        //toggle examples
-        star:{
-          id:4,
-          title:"star",
-          type:"toggle",
-          on:"fa fa-star-o",
-          off:"fa fa-star"
-        },
-        check:{
-          id:5,
-          title:"done",
-          type:"toggle",
-          on: "fa fa-check",
-          off: "fa fa-times"
-        },
-        switch:{
-          id:6,
-          title:"switch",
-          type:"toggle",
-          on: "fa fa-toggle-on",
-          off: "fa fa-toggle-off"
-        }
+    columnTypes:{
+      //text example
+      text:{
+        id:1,
+        title: "text",
+        type: "text",
+        value: ""
+      },
+      // //select examples
+      // select:{
+      //   id:2,
+      //   title:"select",
+      //   type: "select",
+      //   values: [ '']
+      // },
+      status:{
+        id:3,
+        title:"status",
+        type:"select",
+        values: [ 'created','started','done']
+      },
+      //toggle examples
+      star:{
+        id:4,
+        title:"star",
+        type:"toggle",
+        on:"fa fa-star-o",
+        off:"fa fa-star"
+      },
+      check:{
+        id:5,
+        title:"done",
+        type:"toggle",
+        on: "fa fa-check",
+        off: "fa fa-times"
+      },
+      switch:{
+        id:6,
+        title:"switch",
+        type:"toggle",
+        on: "fa fa-toggle-on",
+        off: "fa fa-toggle-off"
       }
+    }
 
 To orderload these options use the following format:
 
@@ -138,6 +136,19 @@ One of tableTwo's main features is the ability to receive json data. This can be
 passing a url to the variable 'options.jsonurl'.
 
 Currently the tableTwo plugin automatically parses headers for individual columns and expects to recieve a standard json array containing objects.
+
+#mobileCondensedView
+
+tableTwo supports hiding of some columns based screensize. This can be achieved by setting the value 'mobileCondensedView' to true.
+
+When this is applied a popover menu will be added to the top corner of the table allowing users to hide or show columns when required.
+
+some columns can be set to auto remain when loading data on a mobile device. This is done using the option 'mobileDefaultColumns'.
+
+column headers should be passed to this array in the format:
+
+    mobileDefaultColumns: ["example1","example2"],
+
 
 #columnTypes
 

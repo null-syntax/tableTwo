@@ -51,7 +51,103 @@
      createSubmitTable(element);
    }
 
+   if (opts.mobileCondensedView){
+     applyMobileCondensedView(element);
+   }
+
  }
+
+ function applyMobileCondensedView(element){
+
+   totalColumns = $("tr:first", element).find("th").length - 1;
+
+   $("tr:first", element).find("th").each(function(i,header){
+
+     if (i == 0 && opts.showRowId){
+     }else if (i == totalColumns && opts.addColumn){
+     }else{
+     removeFlag = true;
+     $.each(opts.mobileDefaultColumns,function(ii,value){
+
+       if(value == $(header).text()){
+         removeFlag = false;
+       }
+     });
+
+
+       if (removeFlag){
+         $(element).find("tr").find("th:nth-child(" + (i + 1) + ")").addClass("condensed-hidden");
+         $(element).find("tr").find("td:nth-child(" + (i + 1) + ")").addClass("condensed-hidden");
+       }
+
+
+   }
+
+   });
+
+   var content = '<div class="form-group column-manager-container">';
+      content += '<label>Columns</label>';
+      content += '<ul class="list-group check-list-box">';
+
+
+      $("tr:first", element).find("th").each(function(i,item){
+
+        totalColumns = $("tr:first", element).find("th").length - 1;
+
+        if(i == 0 && opts.showRowId){
+
+        }else if (i == totalColumns && opts.addColumn){
+
+        }else{
+
+        if ($(this).hasClass("condensed-hidden")){
+          content += '<li class="list-group-item"><label><input type="checkbox" class="condensedViewtoggle" value=""> ' + $(this).text() + '</label></li>';
+        }else{
+          content += '<li class="list-group-item"><label><input type="checkbox" class="condensedViewtoggle" checked> ' + $(this).text() + '</label></li>';
+        }
+      }
+
+      });
+
+      content += '</ul>';
+
+      content += '</div>';
+
+   var html = "<span class='pull-right column-manager'>";
+       html += "<a class='column-manager-popover' data-toggle='popover title=Column Settings' data-html='true' data-placement='left' data-content='" + content + "'>";
+       html += "<i class='fa fa-list'></i></a>";
+       html += "</span>";
+
+
+           $("caption", element).append(html);
+           $(".column-manager-popover").popover();
+
+    $(element).on("click", ".condensedViewtoggle", function(){
+
+      val = $(this).closest("input").is(':checked');
+      text = $(this).closest("label").text().trim();
+
+
+      $("tr:first", element).find("th").each(function(i,column){
+        if ($(column).text() == text){
+
+          if (val == true){
+
+          $("tr", element).find("th:nth-child(" + (i + 1) + ")").removeClass("condensed-hidden");
+          $("tr", element).find("td:nth-child(" + (i + 1) + ")").removeClass("condensed-hidden");
+        }else{
+          $("tr", element).find("th:nth-child(" + (i + 1) + ")").addClass("condensed-hidden");
+          $("tr", element).find("td:nth-child(" + (i + 1) + ")").addClass("condensed-hidden");
+        }
+        }
+
+      });
+
+
+    });
+
+ }
+
 
  function sendJsonData(url,data){
 
@@ -1021,6 +1117,8 @@ $.fn.tableTwo.defaults = {
     getJsonData:false,
     sendJsonUrl:"",
     jsonurl:"",
+    mobileCondensedView: true,
+    //mobileDefaultColumns: [],
         enableColumnSettings: true,
         columnSettings:{"title":"status","budget":"star","project":"switch"},
 
