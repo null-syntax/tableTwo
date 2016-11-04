@@ -29,24 +29,31 @@ tableTwo JSON works best using the following html table format:
 if using static data tableTwo is farely forgiving with html formatting.
 
     #latest update:
-    03/11/2016
+    04/11/2016
     pre-release update, all functions work as expected but more are being added.
     Please see the development list in the readme for more information.
 
-    added option 'mobileCondensedView' (bool) to condense view for mobile devices.
-    added option array 'mobileDefaultColumns', these columns will remain by default in mobile view.
-    added popover menu to hide/show columns.
+    added date column types using bootstrap datepicker.
+    added 'showCondensedView' view option in addition to mobile option,
+    changed option array 'mobileDefaultColumns' to 'condensedDefaultColumns', these columns will remain by default when condensed view is applied.
+    added 'sendOnChange' option to send table data on change.
+    added event binding to addRow
+    added event binding to editCells
+    added event binding to addColumn
+    added event binding to removeRow
+
+    added some functionality to select column types.
+    
 
     added the above to the readme log.
 
 
 
     #currently in development
-    date column types
-    mobile view - started and added (basic)
+    date column types - completed
+    mobile condensed view - started and added (basic)
     event bindings for functions
     font edit menu
-    toggle button column types - completed - documented
 
 
     #current development cycle

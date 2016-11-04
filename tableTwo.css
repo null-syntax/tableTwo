@@ -2,8 +2,12 @@
   display:none;
 }
 
+.submit-button{
+  padding-right:1pc;
+  top:-0.5pc;
+}
 .column-manager{
-  padding-right:1pc; 
+  padding-right:1pc;
 }
 
 .column-settings{
