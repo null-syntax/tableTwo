@@ -185,6 +185,8 @@
 
     array = new Array();
 
+    id = opts.sendJsonPOSTid;
+
     var ajax =  $.ajax({
   url: url,
   type: 'post',
@@ -192,6 +194,7 @@
         },
         dataType: 'json',
             data: {
+              id: id,
               data:json,
 
           }
@@ -338,6 +341,62 @@ sendJsonData(opts.sendJsonUrl,data);
    function buildDataTable(element){
      getJsonData(opts.jsonurl).then(function(res){
 
+       if (jQuery.isEmptyObject(res)){
+         if (opts.createDefaultColumns){
+           headers = '<tr>';
+           //cells = '<tr>';
+
+           $.each(opts.defaultColumns,function(k,v){
+
+             if (opts.enableColumnSettings){
+
+             columnMatch = false;
+             $.each(opts.columnSettings, function(key,item){
+               if (key == v ){
+
+             columnMatch = true;
+
+                 if (opts.columnTypes[item].type == "toggle"){
+
+                   vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.columnTypes[item].off + '"></i></button>';
+                   nn = '<input type="hidden" class="toggleId" value="' + opts.columnTypes[item].id + '">';
+                   headers += '<th class="toggle">' + nn  + '</th>';
+
+                 }else if (opts.columnTypes[item].type == "select"){
+
+                   nn = '<input type="hidden" class="selectId" value="' + opts.columnTypes[item].id + '">';
+                   headers += '<th class="select">' + v  + nn + '</th>';
+
+                 }else if (opts.columnTypes[item].type == "date"){
+
+                   headers += '<th class="date">' + v  + nn + '</th>';
+
+
+                 }
+
+
+                 }
+
+               });
+               if (columnMatch == false){
+                 headers += '<th>' + v  + '</th>';
+
+               }
+             }else{
+             headers += '<th>' + v + '</th>';
+              }
+             //cells += '<td></td>';
+           });
+
+
+         headers += '</tr>';
+         //cells += '</tr>';
+
+         $(element).find("tbody").append(headers);
+                loadOptions(element);
+        }
+      }else{
+
        $.each(res,function(i,item){
 
          headers = '<tr>';
@@ -414,6 +473,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
 
        loadOptions(element);
+     }
      });
 
 
@@ -450,14 +510,14 @@ sendJsonData(opts.sendJsonUrl,data);
             });
 
       ajax.done(function(data){
-
+    if (typeof(data)== 'object'){
   $.each(data,function(i, item){
-
-  var obj = {item};
-
-  array.push(obj);
-
+      var obj = {item};
+      array.push(obj);
   });
+}else{
+  array[0] = data;
+}
               resolve(array);
 
 
@@ -1296,10 +1356,13 @@ $.fn.tableTwo.defaults = {
     getJsonData:false,
     getJsonPOSTData: {},
     sendJsonUrl:"",
+    sendJsonPOSTid: "",
     jsonurl:"",
     showCondensedView: true,
     mobileCondensedView: false,
     sendOnChange: true,
+    createDefaultColumns:true,
+    defaultColumns:[],
     //mobileDefaultColumns: [],
         enableColumnSettings: true,
         columnSettings:{},
@@ -1319,13 +1382,13 @@ $.fn.tableTwo.defaults = {
             type: "date",
             value:"now"
           },
-          // //select examples
-          // select:{
-          //   id:2,
-          //   title:"select",
-          //   type: "select",
-          //   values: [ '']
-          // },
+           //select examples
+           select:{
+             id:2,
+             title:"select",
+             type: "select",
+             values: [ '']
+           },
           status:{
             id:3,
             title:"status",
