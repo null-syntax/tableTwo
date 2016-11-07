@@ -84,6 +84,8 @@
 
  function applyCondensedView(element){
 
+  $.extend(opts.defaultColumnTypes,opts.columnTypes);
+
    totalColumns = $("tr:first", element).find("th").length - 1;
 
    $("tr:first", element).find("th").each(function(i,header){
@@ -137,18 +139,30 @@
       content += '</ul>';
 
       content += '</div>';
+
+
       if ($(element).find("caption").find(".column-manager").length >= 1){
 
       }else{
-   var html = "<span class='pull-right column-manager'>";
+      var html = "<span class='pull-right column-manager'>";
        html += "<a class='column-manager-popover' data-toggle='popover title=Column Settings' data-html='true' data-placement='left' data-content='" + content + "'>";
        html += "<i class='fa fa-list'></i></a>";
        html += "</span>";
 
 
+
+      if (opts.showTableCaption){
+
+
            $("caption", element).append(html);
            $(".column-manager-popover").popover();
-    }
+         }else{
+           $(element).append("<caption></caption>");
+           $("caption", element).append(html);
+           $(".column-manager-popover").popover()
+         }
+      }
+
 
     $(element).on("click", ".condensedViewtoggle", function(){
 
@@ -348,7 +362,9 @@ sendJsonData(opts.sendJsonUrl,data);
 
            $.each(opts.defaultColumns,function(k,v){
 
-             if (opts.enableColumnSettings){
+             if (opts.enableCustomColumnTypes){
+
+               $.extend(opts.defaultColumnTypes,opts.columnTypes);
 
              columnMatch = false;
              $.each(opts.columnSettings, function(key,item){
@@ -356,18 +372,18 @@ sendJsonData(opts.sendJsonUrl,data);
 
              columnMatch = true;
 
-                 if (opts.columnTypes[item].type == "toggle"){
+                 if (opts.defaultColumnTypes[item].type == "toggle"){
 
-                   vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.columnTypes[item].off + '"></i></button>';
-                   nn = '<input type="hidden" class="toggleId" value="' + opts.columnTypes[item].id + '">';
+                   vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.defaultColumnTypes[item].off + '"></i></button>';
+                   nn = '<input type="hidden" class="toggleId" value="' + opts.defaultColumnTypes[item].id + '">';
                    headers += '<th class="toggle">' + nn  + '</th>';
 
-                 }else if (opts.columnTypes[item].type == "select"){
+                 }else if (opts.defaultColumnTypes[item].type == "select"){
 
-                   nn = '<input type="hidden" class="selectId" value="' + opts.columnTypes[item].id + '">';
+                   nn = '<input type="hidden" class="selectId" value="' + opts.defaultColumnTypes[item].id + '">';
                    headers += '<th class="select">' + v  + nn + '</th>';
 
-                 }else if (opts.columnTypes[item].type == "date"){
+                 }else if (opts.defaultColumnTypes[item].type == "date"){
 
                    headers += '<th class="date">' + v  + nn + '</th>';
 
@@ -405,32 +421,34 @@ sendJsonData(opts.sendJsonUrl,data);
           $.each(item,function(n,v){
             $.each(v, function(nn,vv){
 
-              if (opts.enableColumnSettings){
+              if (opts.enableCustomColumnTypes){
+
+              $.extend(opts.defaultColumnTypes,opts.columnTypes);
 
               columnMatch = false;
               $.each(opts.columnSettings, function(key,item){
                 if (key == nn ){
               columnMatch = true;
-                  if (opts.columnTypes[item].type == "toggle"){
+                  if (opts.defaultColumnTypes[item].type == "toggle"){
 
-                    vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.columnTypes[item].off + '"></i></button>';
+                    vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.defaultColumnTypes[item].off + '"></i></button>';
 
-                    nn += '<input type="hidden" class="toggleId" value="' + opts.columnTypes[item].id + '">';
+                    nn += '<input type="hidden" class="toggleId" value="' + opts.defaultColumnTypes[item].id + '">';
 
                     headers += '<th class="toggle">' + nn  + '</th>';
 
 
                     cells += '<td>' + vv + '</td>';
 
-                  }else if (opts.columnTypes[item].type == "select"){
+                  }else if (opts.defaultColumnTypes[item].type == "select"){
 
-                    nn += '<input type="hidden" class="selectId" value="' + opts.columnTypes[item].id + '">';
+                    nn += '<input type="hidden" class="selectId" value="' + opts.defaultColumnTypes[item].id + '">';
 
                     headers += '<th class="select">' + nn  + '</th>';
 
                     cells += '<td>' + vv + '</td>';
 
-                  }else if (opts.columnTypes[item].type == "date"){
+                  }else if (opts.defaultColumnTypes[item].type == "date"){
 
                     headers += '<th class="date">' + nn  + '</th>';
 
@@ -533,6 +551,11 @@ sendJsonData(opts.sendJsonUrl,data);
 
 
            $("tr:first", element).find("th").each(function(i,item){
+
+
+               $.extend(opts.defaultColumnTypes,opts.columnTypes);
+
+
                dupcheck = $(item).find(".column-settings-popover").length;
                if (dupcheck == 0){
                if (i == 0 && opts.showRowId == true){
@@ -570,7 +593,7 @@ sendJsonData(opts.sendJsonUrl,data);
                content += '<label>Type</label>';
                content += '<select class="form-control column-settings-type" >';
 
-              $.each(opts.columnTypes, function(i,item){
+              $.each(opts.defaultColumnTypes, function(i,item){
                 content += '<option value="' + item.id + '">' + item.title + '</option>';
                 })
 
@@ -677,7 +700,9 @@ sendJsonData(opts.sendJsonUrl,data);
 
               typeId = $(this).find(":selected").val();
 
-              $.each(opts.columnTypes,function(i,item){
+               $.extend(opts.defaultColumnTypes,opts.columnTypes);
+
+              $.each(opts.defaultColumnTypes,function(i,item){
                   if (item.id == typeId){
                       $(element, "tr:first").find("th:nth-child(" + columnId + ")").each(function(i,itemm){
 
@@ -814,7 +839,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
 
    function bindEditCells(element){
-
+      $.extend(opts.defaultColumnTypes, opts.columnTypes);
 
        $(element).on("click", "td", function(){
 
@@ -847,7 +872,7 @@ sendJsonData(opts.sendJsonUrl,data);
               html += '<select class="form-control" value="' + value + '">';
               html += '<option>' + value + '</option>';
 
-              $.each(opts.columnTypes, function(i,item){
+              $.each(opts.defaultColumnTypes, function(i,item){
                 if (item.id == id){
                 $.each(item.values,function(ii,iitem){
                     html += '<option>' + iitem + '</option>';
@@ -892,6 +917,8 @@ sendJsonData(opts.sendJsonUrl,data);
 
        $(element, "button").on("click", ".toggleButton", function(){
 
+               $.extend(opts.defaultColumnTypes, opts.columnTypes);
+
          columnId = $(this).closest("td").index() + 1;
          rowId = $(this).closest("tr").index();
 
@@ -906,7 +933,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
          if($(this).hasClass("toggle-off")){
 
-           $.each(opts.columnTypes, function(i,item){
+           $.each(opts.defaultColumnTypes, function(i,item){
              if (item.id == id){
                html = '<i  class="' + item.on + '"></i>';
                }
@@ -919,7 +946,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
            $(this).removeClass("toggle-on");
 
-           $.each(opts.columnTypes, function(i,item){
+           $.each(opts.defaultColumnTypes, function(i,item){
              if (item.id == id){
                html = '<i  class="' + item.off + '"></i>';
               data["value"] = false;
@@ -1077,13 +1104,22 @@ sendJsonData(opts.sendJsonUrl,data);
         $(element).find("tr").each(function(i,item){
 
             if(i == 0){
-                html = '<th>';
+              if (opts.showCondensedView){
+                html = '<th class="">';
                 html += '</th>';
+              }else{
+                html = '<th class="">';
+                html += '</th>';
+              }
 
                 $(item).find("th:last").prev("th").after(html);
 
             }else{
-                html = '<td></td>';
+              if (opts.showCondensedView){
+                html = '<td class=""></td>';
+              }else{
+                html = '<td ></td>';
+              }
                 $(item).find("td:last").prev("td").after(html);
             }
 
@@ -1124,6 +1160,8 @@ sendJsonData(opts.sendJsonUrl,data);
 
         function createAddRow(element){
 
+                $.extend(opts.defaultColumnTypes, opts.columnTypes);
+
           if (!opts.addColumn){
             html = '<th class="add-row-header"></th>';
             $("tr:first", element).find("th:last").after(html);
@@ -1160,7 +1198,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
                   html += '<select class="form-control" value="">';
 
-                  $.each(opts.columnTypes, function(i,item){
+                  $.each(opts.defaultColumnTypes, function(i,item){
                     if (item.id == id){
                     $.each(item.values,function(ii,iitem){
                         html += '<option>' + iitem + '</option>';
@@ -1173,7 +1211,7 @@ sendJsonData(opts.sendJsonUrl,data);
                   html += '<td>';
                   id = $(item).find(".toggleId").val();
 
-                  $.each(opts.columnTypes, function(i,item){
+                  $.each(opts.defaultColumnTypes, function(i,item){
                     if (item.id == id){
                         html += '<button class="btn btn-primary toggleButton toggle-off"><i class="' + item.off + '" ></i></button>';
                     }
@@ -1199,9 +1237,19 @@ sendJsonData(opts.sendJsonUrl,data);
 
                     });
 
+
+
+
             html += '</tr>';
 
             $(element).find("tr:last").after(html);
+
+            $("tr:first", element).find("th").each(function(i,item){
+              if ($(this).hasClass("condensed-hidden")){
+                $("tr:last", element).find("td:nth-child(" + i + ")").addClass("condensed-hidden");
+
+              }
+            });
 
               $(element).find("tr:first").find("th:last").addClass("add-row-header");
 
@@ -1364,11 +1412,11 @@ $.fn.tableTwo.defaults = {
     createDefaultColumns:true,
     defaultColumns:[],
     //mobileDefaultColumns: [],
-        enableColumnSettings: true,
+        enableCustomColumnTypes: true,
         columnSettings:{},
 
 
-        columnTypes:{
+        defaultColumnTypes:{
           //text example
           text:{
             id:1,

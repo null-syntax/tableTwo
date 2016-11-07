@@ -30,20 +30,15 @@ if using static data tableTwo is farely forgiving with html formatting.
 
     #latest update:
     04/11/2016
-    pre-release update, all functions work as expected but more are being added.
+    pre-release update, all functions should work as expected but more are being added and functionality may be changed.
     Please see the development list in the readme for more information.
 
-    added date column types using bootstrap datepicker.
-    added 'showCondensedView' view option in addition to mobile option,
-    changed option array 'mobileDefaultColumns' to 'condensedDefaultColumns', these columns will remain by default when condensed view is applied.
-    added 'sendOnChange' option to send table data on change.
-    added event binding to addRow
-    added event binding to editCells
-    added event binding to addColumn
-    added event binding to removeRow
+    fixed issue with adding columns while using condensed view.
+    added default columns builder.
+    changed some condensed view settings.
+    added more defaults column types.
+    added ability for external columns types.
 
-    added some functionality to select column types.
-    
 
     added the above to the readme log.
 

@@ -1,3 +1,22 @@
+#######################################################
+04/11/2016
+pre-release update, all functions work as expected but more are being added.
+Please see the development list in the readme for more information.
+
+added date column types using bootstrap datepicker.
+added 'showCondensedView' view option in addition to mobile option,
+changed option array 'mobileDefaultColumns' to 'condensedDefaultColumns', these columns will remain by default when condensed view is applied.
+added 'sendOnChange' option to send table data on change.
+added event binding to addRow
+added event binding to editCells
+added event binding to addColumn
+added event binding to removeRow
+
+added some functionality to select column types.
+
+
+added the above to the readme log.
+
 
 ######################################################
 03/11/2016
