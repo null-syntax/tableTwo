@@ -11,6 +11,9 @@
 
     }else{
       loadOptions(this);
+      if (opts.createDefaultColumns){
+        createStaticDefaultColumns(this);
+      }
     }
 
  function loadOptions(element){
@@ -352,6 +355,22 @@ sendJsonData(opts.sendJsonUrl,data);
 
   }
 
+function createStaticDefaultColumns(element){
+
+  headers = '<tr>';
+
+  $.each(opts.defaultColumns,function(k,v){
+
+    headers += '<th>' + v + '</th>';
+
+  });
+
+  headers += '</tr>';
+
+  $("tbody", element).append(headers);
+
+}
+
    function buildDataTable(element){
      getJsonData(opts.jsonurl).then(function(res){
 
@@ -566,7 +585,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
                var content = '<div class="form-group column-settings-container">';
                content += '<label>Title</label>';
-               content += '<input type="text" class="form-control column-settings-title" value="' + $(item).html() + '"/>';
+               content += '<input type="text" class="form-control column-settings-title" value="' + $(item).text() + '"/>';
 
                content += '<div class="form-group">'
 
@@ -694,7 +713,25 @@ sendJsonData(opts.sendJsonUrl,data);
 
            });
 
-           $(element, "th").on("change", ".column-settings-type", function(){
+           $("tr", element).on("keydown", ".column-settings-title", function(e){
+                       if (e.which == 13){
+
+              columnId = parseInt($(this).closest("th").find(".columnId").val()) + 1;
+
+              value = $(this).val();
+
+              $("tr:first", element).find("th:nth-child(" + columnId + ")").text(value);
+
+              createColumnOptions(element);
+
+              if (opts.sendOnChange){
+                sendData(element);
+              }
+
+                       }
+           });
+
+           $("th", element).on("change", ".column-settings-type", function(){
 
               columnId = parseInt($(this).closest("th").find(".columnId").val()) + 1;
 
@@ -777,7 +814,7 @@ sendJsonData(opts.sendJsonUrl,data);
    function bindEditHeaders(element){
 
 
-       $(element, ".editing-header").on("click", "button", function(event){
+       $(".editing-header", element).on("click", "button", function(event){
 
             value = $(this).closest("div").find("input").val();
             cell = $(this).closest("div").closest("th");
@@ -822,7 +859,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
 
 
-       $(element, "th").on("keydown", "input", function(event){
+       $("th", element).on("keydown", "input", function(event){
            if (event.which == 13){
 
 
@@ -971,7 +1008,7 @@ sendJsonData(opts.sendJsonUrl,data);
        });
 
 
-       $(element, "td").on("keydown", "input", function(event){
+       $("td", element).on("keydown", "input", function(event){
 
 
 
@@ -1004,8 +1041,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
        });
 
-       $(element, ".editing").on("click", ".confirm", function(event){
-
+       $(element).on("click", ".confirm", function(event){
 
          columnId = $(this).closest("td").index() + 1;
          rowId = $(this).closest("tr").index();
@@ -1017,19 +1053,14 @@ sendJsonData(opts.sendJsonUrl,data);
           }
 
           if ($(this).closest("td").find("select").length > 0){
-
               value = $(this).closest("div").find("select option:selected").text();
-
           }else{
-
             value = $(this).closest("td").find("input").val();
-
             }
-            cell = $(this).closest("td");
+            $(this).closest("td").removeClass("editing");
+            $(this).closest("td").html(value);
 
-            cell.html(value);
-            cell.removeClass("editing");
-            //event.stopPropagation();
+            event.stopPropagation();
             data["value"] = value;
        opts.onEditCell.call(data);
 
@@ -1285,7 +1316,13 @@ sendJsonData(opts.sendJsonUrl,data);
                     if (opts.showRowId == true){
                             $(element).find("tr:last").find("td").each(function(i,item){
 
+                              if ($("tr:first",element).find("th:nth-child(" + (i + 1) + ")").hasClass("condensed-hidden")){
+                            html += '<td class="condensed-hidden">';
+                          }else{
                             html += '<td>';
+                          }
+
+
                                 if (i == 0){
                                     value = $(item).html();
                                     html += value;
@@ -1308,7 +1345,7 @@ sendJsonData(opts.sendJsonUrl,data);
                                   }else{
 
                                     value = $(item).find("input").val();
-
+                                    $(item).find("input").val("");
                                       rowData[i] = value;
 
 
