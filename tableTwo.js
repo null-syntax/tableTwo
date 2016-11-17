@@ -10,10 +10,10 @@
       buildDataTable(this);
 
     }else{
-      loadOptions(this);
       if (opts.createDefaultColumns){
         createStaticDefaultColumns(this);
       }
+      loadOptions(this);
     }
 
  function loadOptions(element){
@@ -36,6 +36,10 @@
 
    if (opts.editCells){
        bindEditCells(element);
+   }else{
+     if (opts.rowClick){
+       bindRowClick(element);
+     }
    }
 
    if (opts.editHeaders){
@@ -76,7 +80,175 @@
    });
   }
 
+  if (opts.addFooter){
+    addFooter(element);
+  }
+
  }
+
+function bindRowClick(element){
+
+  $(element).on("click", "td", function(){
+
+    if (!$(this).closest("tr").hasClass("add-row")){
+
+      position = $(this).index() - $(this.active).index();
+      row = $(this).closest("tr").index();
+
+      if (!$(element, "tr:first").find("th:nth-child(" + position + ")").hasClass("toggle")){
+      if (position == 1 && opts.showRowId == true ){
+      }else{
+      size = $(this).closest("tr").find("td").length;
+      if (position == size && opts.addColumn == true ){
+      }else{
+
+            data = {"row":row}
+
+           opts.onRowClick.call(data);
+
+     }
+
+    }
+    }
+    }
+  });
+
+}
+
+function addFooter(element){
+
+  if (!$(element).closest("div").hasClass("table-container")){
+    html = '<div class="table-container"></div>';
+    }
+
+    $(element).wrap(html);
+
+    html = '<div class="table-footer"></div>';
+
+    $(element).closest(".table-container").append(html);
+
+    html = '<div class="input-group footer-left">';
+
+    if (opts.footerAddRowButton){
+      html += '<div class="dropup" style="">'
+      html += '<button class="btn btn-primary footer-add-row-open" data-toggle="dropdown">Add';
+      html += '<span class="caret" style="display:none;"></span>';
+      html += '</button>';
+      html += '<ul class="dropdown-menu footer-add-row-dropdown" style="padding-left:0.5pc;padding-right:0.5pc;"">';
+      html += '</ul>';
+      html += '</div>';
+
+      $(element).closest(".table-responsive").css("overflow","visible");
+
+    }
+
+    html += '</div>';
+
+    $(element).closest(".table-container").find(".table-footer").append(html);
+
+    $('.footer-add-row-open').on("click", function(){
+
+      totalColumns = $("tr:first", element).find("th").length - 1;
+
+      $(this).closest("div").find(".dropdown-menu").empty();
+        html = '<li class="footer-add-row-dropdown-header"><label>Add Row</label></li>';
+        html += '<li class="divider"></li>';
+        html += '<li>'
+        html += '<table class="add-row-dropdown-table">';
+        html += '<tbody>';
+
+      $(this).closest(".table-container").find("tr:first").find("th").each(function(i,item){
+
+        if (i == 0 && opts.showRowId){
+
+        }else if (i == totalColumns && opts.addColumn){
+        }else if (i == totalColumns && opts.removeRow){
+        }else{
+          html += '<tr>';
+          html += '<td><label>' + $(item).text() + '</label></td>';
+          html += '<td>';
+          html += '<div class="form-group">';
+          html += '<input class="form-control" value=""></input>';
+          html += '</div>';
+          html += '</div>';
+          html += '</td>';
+          html += '</tr>';
+        }
+      });
+
+      html += '</tbody>';
+      html += '</table>';
+      html += '<div class="form-group">';
+      html += '<div class="input-group">';
+      html += '<div class="input-group-btn">';
+      html += '<button class="btn btn-primary footer-addRow">Save</button>';
+      html += '</div>';
+      html += '<div class="input-group-btn">';
+      html += '<button class="btn btn-success">Cancel</button>';
+      html += '</div>';
+      html += '</div>';
+      html += '</div>';
+      html += '</li>';
+      html += '<li></li>';
+
+      $(this).closest("div").find(".dropdown-menu").prepend(html);
+
+    });
+
+    if (opts.footerAddRowButton){
+      $("body").on("click",".footer-addRow", function(event){
+
+        event.stopImmediatePropagation();
+        rowData = [];
+        html = '<tr>';
+        $(this).closest(".table-container").find("table").find("tr").each(function(i,item){
+            val = $(this).find("td:nth-child(2)").find("input").val();
+            html += '<td>' + val + '</td>';
+            rowData[i] = val;
+        });
+        html  += '</tr>';
+
+        $(this).closest(".table-container").find("table:first").find("tr:last").after(html);
+
+        if (opts.removeRow){
+          html = '<button type="button" class="btn btn-block btn-danger removeRow">X</button>';
+          if (opts.addRow){
+          $(element).find("tr:last").prev("tr").find("td:last").html(html);
+        }else{
+          $(element).find("tr:last").find("td:last").html(html);
+        }
+        }
+
+        if(opts.removeRow){
+          createRemoveRow($(this).closest(".table-container").find("table:first"));
+        }
+
+        if (opts.showRowId){
+          createRowId($(this).closest(".table-container").find("table:first"));
+        }
+
+         if (opts.showRowId){
+          rowData.splice(0,1);
+        }
+
+        if (opts.addColumn){
+          rowData.splice(rowData.length - 1,1);
+        }
+
+        opts.onRowAdd.call(rowData);
+
+        if (opts.sendOnChange){
+          sendData($(this).closest(".table-container").find("table:first"));
+        }
+
+
+      });
+    }
+
+  }
+
+
+
 
  function removeCondensedView(element){
    $(element).find("th").removeClass("condensed-hidden");
@@ -95,11 +267,13 @@
 
      if (i == 0 && opts.showRowId){
      }else if (i == totalColumns && opts.addColumn){
+     }else if (i == totalColumns && opts.removeRow){
      }else{
      removeFlag = true;
      $.each(opts.condensedDefaultColumns,function(ii,value){
-
-       if(value == $(header).text()){
+       if (value == "*showAll"){
+         removeFlag = false;
+       }else if(value == $(header).text()){
          removeFlag = false;
        }
      });
@@ -269,7 +443,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
   function createSubmitTable(element){
 
-    html = '<div class="submit-container"></div>';
+    html = '<div class="table-container"></div>';
 
     $(element).wrap(html);
 
@@ -282,7 +456,7 @@ sendJsonData(opts.sendJsonUrl,data);
 
 
 
-    $(".submit-container").on("click", ".tableSubmit", function(){
+    $(".table-container").on("click", ".tableSubmit", function(){
       sendData(element);
     });
 
@@ -293,9 +467,13 @@ sendJsonData(opts.sendJsonUrl,data);
 
     if (!opts.addColumn){
       if (!opts.addRow){
-        html = '<th></th>';
+        html = '<th class="remove-row-header"></th>';
         $("tr:first", element).find("th:last").after(html);
-          html = '<td></td>';
+
+        html = '<td>';
+        html += '<button type="button" class="btn btn block btn-danger removeRow" style="width:100%;"> X </button>';
+        html += '</td>'
+
         $(element).find("tr").each(function(i,item){
           $(item).find("td:last").after(html);
         });
@@ -310,7 +488,9 @@ sendJsonData(opts.sendJsonUrl,data);
             if (i == totalRows && opts.addRow){
             }else{
 
-              html = '<td><button type="button" class="btn btn block btn-danger removeRow" style="width:100%;"> X </button></td>';
+              html = '<td>';
+              html += '<button type="button" class="btn btn block btn-danger removeRow" style="width:100%;"> X </button>';
+              html += '</td>';
               $(item).find("td:last").after(html);
 
             }
@@ -356,7 +536,29 @@ sendJsonData(opts.sendJsonUrl,data);
   }
 
 function createStaticDefaultColumns(element){
+  if (opts.createDefaultGrid){
+    xy = opts.gridSize.split('x');
+    headers = '<tr>';
+    for (i = 0; i < xy[0]; i++ ){
+      headers += '<th>' + (i + 1) + '</th>';
+    }
+    headers += '</tr>';
 
+    $("tbody", element).append(headers);
+
+    cells = '';
+    for (i = 0;i < xy[1]; i++){
+      cells += '<tr>';
+      for (ii = 0; ii < xy[0]; ii++ ){
+        cells += '<td></td>';
+      }
+      cells += '</tr>';
+    }
+
+    $("tr:last", element).after(cells);
+
+
+  }else{
   headers = '<tr>';
 
   $.each(opts.defaultColumns,function(k,v){
@@ -368,7 +570,7 @@ function createStaticDefaultColumns(element){
   headers += '</tr>';
 
   $("tbody", element).append(headers);
-
+  }
 }
 
    function buildDataTable(element){
@@ -429,6 +631,8 @@ function createStaticDefaultColumns(element){
 
          $(element).find("tbody").append(headers);
                 loadOptions(element);
+        }else if (opts.createDefaultGrid){
+
         }
       }else{
 
@@ -889,10 +1093,6 @@ function createStaticDefaultColumns(element){
            position = $(this).index() - $(this.active).index();
 
            if (!$(element, "tr:first").find("th:nth-child(" + position + ")").hasClass("toggle")){
-
-
-
-
            if (position == 1 && opts.showRowId == true ){
            }else{
            size = $(this).closest("tr").find("td").length;
@@ -1417,20 +1617,33 @@ function createStaticDefaultColumns(element){
 
    }
 
+   return this;
    }
 
 
    // Plugin defaults – added as a property on our plugin function.
 $.fn.tableTwo.defaults = {
     addColumn: true,
-    onColumnAdd: function(){},
+    onColumnAdd: function(e){
+      e.stopPropagation();
+    },
     addRow: true,
-    onRowAdd: function(){},
+    onRowAdd: function(e){
+      e.stopPropagation();
+    },
     removeRow:true,
-    onRowRemove: function(){},
+    onRowRemove: function(e){
+      e.stopPropagation();
+    },
     showRowId:true,
     editCells:true,
-    onEditCell:function(){},
+    onEditCell:function(e){
+      e.stopPropagation();
+    },
+    rowClick:false,
+    onRowClick:function(e){
+      e.stopPropagation();
+    },
     showColumnOptions:true,
     allowDropdown:true,
     editHeaders:true,
@@ -1445,9 +1658,13 @@ $.fn.tableTwo.defaults = {
     jsonurl:"",
     showCondensedView: true,
     mobileCondensedView: false,
-    sendOnChange: true,
+    sendOnChange: false,
     createDefaultColumns:true,
+    createDefaultGrid:false,
     defaultColumns:[],
+    addFooter:true,
+    footerAddRowButton:true,
+    gridSize:"8x4",
     //mobileDefaultColumns: [],
         enableCustomColumnTypes: true,
         columnSettings:{},

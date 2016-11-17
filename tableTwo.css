@@ -1,10 +1,33 @@
+.footer-add-row-dropdown-header{
+  text-align:center;
+  font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+
+.footer-add-row-dropdown{
+  --width:20pc;
+}
+
+.table-footer{
+      border-top: 1px solid #f4f4f4;
+      min-height: 70px;
+}
+
+.footer-left{
+  padding-top: 1pc;
+  padding-left: 1pc;
+}
+
+.table-container{
+
+}
+
 .condensed-hidden{
   display:none;
 }
 
 .submit-button{
   padding-right:1pc;
-  top:-0.5pc;
+  padding-bottom:1pc;
 }
 .column-manager{
   padding-right:1pc;
