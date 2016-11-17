@@ -1,10 +1,16 @@
    $.fn.tableTwo = function(options) {
 
-
        // Extend our default options with those provided.
     // Note that the first argument to extend is an empty
     // object – this is to keep from overriding our "defaults" object.
     var opts = $.extend( {}, $.fn.tableTwo.defaults, options );
+
+    alert(JSON.stringify(opts));
+
+    var base = this;
+    $(this).data("tableTwo", opts);
+
+    opts = $(this).data("tableTwo");
 
     if (opts.getJsonData){
       buildDataTable(this);
@@ -15,6 +21,7 @@
       }
       loadOptions(this);
     }
+
 
  function loadOptions(element){
 
@@ -197,47 +204,49 @@ function addFooter(element){
 
     if (opts.footerAddRowButton){
       $("body").on("click",".footer-addRow", function(event){
-
         event.stopImmediatePropagation();
+
+        base = $(this).closest(".table-container").find("table:nth-child(1)").data("tableTwo");
         rowData = [];
         html = '<tr>';
-        $(this).closest(".table-container").find("table").find("tr").each(function(i,item){
-            val = $(this).find("td:nth-child(2)").find("input").val();
+        if (base.showRowId){
+          html += '<td></td>';
+        }
+        $(this).closest(".footer-add-row-dropdown").find("tr").each(function(i,item){
+
+            val = $(item).find("td:nth-child(2)").find("input").val();
             html += '<td>' + val + '</td>';
             rowData[i] = val;
         });
+
+        if (base.addColumn || base.addRow || base.removeRow){
+          html += '<td></td>';
+        }
+
         html  += '</tr>';
 
         $(this).closest(".table-container").find("table:first").find("tr:last").after(html);
 
-        if (opts.removeRow){
+        if (base.removeRow){
           html = '<button type="button" class="btn btn-block btn-danger removeRow">X</button>';
-          if (opts.addRow){
+          if (base.addRow){
           $(element).find("tr:last").prev("tr").find("td:last").html(html);
         }else{
           $(element).find("tr:last").find("td:last").html(html);
         }
         }
 
-        if(opts.removeRow){
+        if(base.removeRow){
           createRemoveRow($(this).closest(".table-container").find("table:first"));
         }
 
-        if (opts.showRowId){
+        if (base.showRowId){
           createRowId($(this).closest(".table-container").find("table:first"));
         }
 
-         if (opts.showRowId){
-          rowData.splice(0,1);
-        }
+        base.onRowAdd.call(rowData);
 
-        if (opts.addColumn){
-          rowData.splice(rowData.length - 1,1);
-        }
-
-        opts.onRowAdd.call(rowData);
-
-        if (opts.sendOnChange){
+        if (base.sendOnChange){
           sendData($(this).closest(".table-container").find("table:first"));
         }
 
@@ -467,6 +476,12 @@ sendJsonData(opts.sendJsonUrl,data);
 
     if (!opts.addColumn){
       if (!opts.addRow){
+
+        if ($("tr:first", element).find("th:last").hasClass("remove-row-header")){
+          $("tr",element).find("th:last").remove();
+          $("tr",element).find("td:last").remove();
+        }
+
         html = '<th class="remove-row-header"></th>';
         $("tr:first", element).find("th:last").after(html);
 
@@ -711,7 +726,6 @@ function createStaticDefaultColumns(element){
 
        headers += '</tr>';
        $(element).find("tbody").prepend(headers);
-
 
        loadOptions(element);
      }
@@ -1623,6 +1637,7 @@ function createStaticDefaultColumns(element){
 
    // Plugin defaults – added as a property on our plugin function.
 $.fn.tableTwo.defaults = {
+
     addColumn: true,
     onColumnAdd: function(e){
       e.stopPropagation();
