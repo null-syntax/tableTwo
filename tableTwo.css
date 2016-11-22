@@ -1,3 +1,15 @@
+.tbody-scrollable{
+  overflow-y:scroll;
+  display:block;
+}
+
+
+.row-scrollable{
+  display:table;
+  table-layout:fixed;
+  width:100%;
+}
+
 .footer-add-row-dropdown-header{
   text-align:center;
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;

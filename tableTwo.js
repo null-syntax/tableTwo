@@ -5,8 +5,6 @@
     // object – this is to keep from overriding our "defaults" object.
     var opts = $.extend( {}, $.fn.tableTwo.defaults, options );
 
-    alert(JSON.stringify(opts));
-
     var base = this;
     $(this).data("tableTwo", opts);
 
@@ -91,7 +89,27 @@
     addFooter(element);
   }
 
+  if (opts.tableScrollable){
+    addTableScrollable(element);
+  }
+
  }
+
+function addTableScrollable(element){
+  if (opts.tableMaxSize){
+    //$(element).closest("table-container").css("max-height", opts.tableMaxSize);
+    $(element).children("tbody").addClass("tbody-scrollable");
+    $(element).children(".tbody-scrollable").css("max-height", opts.tableMaxSize);
+
+
+  }
+
+  $(element).find("tr").each(function(i,item){
+$(item).addClass("row-scrollable");
+  });
+
+
+}
 
 function bindRowClick(element){
 
@@ -108,8 +126,25 @@ function bindRowClick(element){
       size = $(this).closest("tr").find("td").length;
       if (position == size && opts.addColumn == true ){
       }else{
+        data = {"row":row}
+        rowData = [];
 
-            data = {"row":row}
+        $(this).closest("tr").find("td").each(function(i,item){
+
+          totalColumns = $("tr:first", element).find("th").length - 1;
+
+          if(i==0 && opts.showRowId){
+
+          }else if(i == totalColumns && opts.addColumn){
+
+          }else if(i == totalColumns && opts.removeRow){
+
+          }else{
+            rowData[i] = $(item).text();
+          }
+
+        });
+        data["rowData"] = rowData;
 
            opts.onRowClick.call(data);
 
@@ -125,10 +160,11 @@ function bindRowClick(element){
 function addFooter(element){
 
   if (!$(element).closest("div").hasClass("table-container")){
-    html = '<div class="table-container"></div>';
+      html = '<div class="table-container"></div>';
+      $(element).wrap(html);
     }
 
-    $(element).wrap(html);
+    $(element).closest(".table-container").find(".table-footer").remove();
 
     html = '<div class="table-footer"></div>';
 
@@ -137,6 +173,9 @@ function addFooter(element){
     html = '<div class="input-group footer-left">';
 
     if (opts.footerAddRowButton){
+
+      $(element).find(".footer-add-row-open").closest(".dropup").remove();
+
       html += '<div class="dropup" style="">'
       html += '<button class="btn btn-primary footer-add-row-open" data-toggle="dropdown">Add';
       html += '<span class="caret" style="display:none;"></span>';
@@ -330,6 +369,7 @@ function addFooter(element){
       if ($(element).find("caption").find(".column-manager").length >= 1){
 
       }else{
+
       var html = "<span class='pull-right column-manager'>";
        html += "<a class='column-manager-popover' data-toggle='popover title=Column Settings' data-html='true' data-placement='left' data-content='" + content + "'>";
        html += "<i class='fa fa-list'></i></a>";
@@ -339,10 +379,10 @@ function addFooter(element){
 
       if (opts.showTableCaption){
 
-
            $("caption", element).append(html);
            $(".column-manager-popover").popover();
          }else{
+
            $(element).append("<caption></caption>");
            $("caption", element).append(html);
            $(".column-manager-popover").popover()
@@ -423,7 +463,7 @@ function addFooter(element){
             rowData = {};
             $(row).find("td").each(function(ii,cell){
             if (ii == totalColumns && opts.addColumn){
-
+            }else if (ii == totalColumns && opts.removeRow){
             }else{
               if (ii == 0 && opts.showRowId){
 
@@ -647,7 +687,8 @@ function createStaticDefaultColumns(element){
          $(element).find("tbody").append(headers);
                 loadOptions(element);
         }else if (opts.createDefaultGrid){
-
+          createStaticDefaultColumns(element);
+          loadOptions(element);
         }
       }else{
 
@@ -736,14 +777,15 @@ function createStaticDefaultColumns(element){
    }
 
    function createTableCaption(element){
+
+     if ($(element).find(".caption").length >= 1){
+       $(element).find(".caption").remove();
+     }
+
      if (opts.tableCaptionValue != ""){
-
        html = '<caption class="caption">' + opts.tableCaptionValue + '</caption>';
-
      }else{
-
        html = '<caption class="caption">' + opts.jsonurl + '</caption>';
-
      }
        $(element).prepend(html)
    }
@@ -1680,6 +1722,8 @@ $.fn.tableTwo.defaults = {
     addFooter:true,
     footerAddRowButton:true,
     gridSize:"8x4",
+    tableMaxSize:false,
+    tableScrollable:false,
     //mobileDefaultColumns: [],
         enableCustomColumnTypes: true,
         columnSettings:{},
