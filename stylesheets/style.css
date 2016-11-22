@@ -1,5 +1,5 @@
-.btn{
-    color: #444;
+.btn > .btn-primary{
+    color: #fffff;
 }
 
 .btn-primary{
