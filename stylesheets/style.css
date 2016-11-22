@@ -12,3 +12,8 @@
     background-color: #5cb85c;
     border-color: #4cae4c;
 }
+
+.btn-default{
+    background-color: #fff;
+    border-color: #ccc;
+}
