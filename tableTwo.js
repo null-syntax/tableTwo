@@ -1000,6 +1000,7 @@ function createStaticDefaultColumns(element){
                $.extend(opts.defaultColumnTypes,opts.columnTypes);
 
               $.each(opts.defaultColumnTypes,function(i,item){
+
                   if (item.id == typeId){
                       $(element, "tr:first").find("th:nth-child(" + columnId + ")").each(function(i,itemm){
 
@@ -1013,7 +1014,6 @@ function createStaticDefaultColumns(element){
                                 $(this).removeClass();
                                 $(this).remove('.toggleId');
                                 $(this).addClass(item.type);
-
 
                               if ($(this).find(".selectId").length){
                                   $(this).find(".selectId").val(item.id);
@@ -1469,7 +1469,6 @@ function createStaticDefaultColumns(element){
 
 
               }else if ($(item).hasClass("date")){
-
                 html += '<td>';
                 html += '<div class="input-group date" data-provide="datepicker">';
                 html += '<input type="text" class="form-control">';
@@ -1511,6 +1510,7 @@ function createStaticDefaultColumns(element){
 
 
                 }else{
+                  alert("d");
 
 
 
@@ -1745,34 +1745,34 @@ $.fn.tableTwo.defaults = {
           },
            //select examples
            select:{
-             id:2,
+             id:3,
              title:"select",
              type: "select",
              values: [ '']
            },
           status:{
-            id:3,
+            id:4,
             title:"status",
             type:"select",
             values: [ 'created','started','done']
           },
           //toggle examples
           star:{
-            id:4,
+            id:5,
             title:"star",
             type:"toggle",
             on:"fa fa-star-o",
             off:"fa fa-star"
           },
           check:{
-            id:5,
+            id:6,
             title:"done",
             type:"toggle",
             on: "fa fa-check",
             off: "fa fa-times"
           },
           switch:{
-            id:6,
+            id:7,
             title:"switch",
             type:"toggle",
             on: "fa fa-toggle-on",
