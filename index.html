@@ -24,8 +24,6 @@
 
 <p>TableTwo is a Bootstrap compatible jQuery plugin that easily turns HTML tables into a responsive editable environment.</p>
 
-
-
 <p>For tableTwo elements to render the following two files must be included:</p>
 
 <p>tableTwo.js
@@ -37,9 +35,18 @@
 $('.elementsToTableify').tableTwo();
 </code></pre>
 
-<p>Some elements of tableTwo (such as the toggle buttons and column options menu) also use font awesome icons which can be found here:</p>
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
 
-<pre><code>http://fontawesome.io
+<p>Below is a list of minimum and suggested dependencies for using tableTwo. Minimums listed are requirements for tableTwo to render, suggested dependencies are required to enable certain features of tableTwo. If you do not wish to use these features you may not wish to include these dependencies.</p>
+
+<pre><code>Minimum:
+jQuery (built using 2.2)
+bootstrsap (built using 3.3)
+
+Suggested:
+Font Awesome (toggle buttons, icons for column options menus)
+bootstrap Datepicker (Date column type)
 </code></pre>
 
 <p>tableTwo JSON works best using the following html table format:</p>
@@ -47,7 +54,8 @@ $('.elementsToTableify').tableTwo();
 <div class="highlight highlight-text-html-basic"><pre>  &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>table-responsive<span class="pl-pds">"</span></span>&gt;
    &lt;<span class="pl-ent">table</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>table table-condensed<span class="pl-pds">"</span></span>&gt;
        &lt;<span class="pl-ent">tbody</span>&gt;
-     &lt;/<span class="pl-ent">tbody</span>&gt;&lt;/<span class="pl-ent">table</span>&gt;
+       &lt;/<span class="pl-ent">tbody</span>&gt;
+   &lt;/<span class="pl-ent">table</span>&gt;
   &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
 
 <p>if using static data tableTwo is farely forgiving with html formatting.</p>
