@@ -16,6 +16,8 @@
     }else{
       if (opts.createDefaultColumns){
         createStaticDefaultColumns(this);
+      }else{
+        mapColumnOptions(this);
       }
       loadOptions(this);
     }
@@ -94,6 +96,54 @@
   }
 
  }
+
+function mapColumnOptions(element){
+
+$("tr:first", element).find("th").each(k,v){
+
+    if (opts.enableCustomColumnTypes){
+
+      $.extend(opts.defaultColumnTypes,opts.columnTypes);
+
+    columnMatch = false;
+    $.each(opts.columnSettings, function(key,item){
+      if (key == v ){
+
+    columnMatch = true;
+
+        if (opts.defaultColumnTypes[item].type == "toggle"){
+
+          vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.defaultColumnTypes[item].off + '"></i></button>';
+          nn = '<input type="hidden" class="toggleId" value="' + opts.defaultColumnTypes[item].id + '">';
+          headers += '<th class="toggle">' + nn  + '</th>';
+
+        }else if (opts.defaultColumnTypes[item].type == "select"){
+
+          nn = '<input type="hidden" class="selectId" value="' + opts.defaultColumnTypes[item].id + '">';
+          headers += '<th class="select">' + v  + nn + '</th>';
+
+        }else if (opts.defaultColumnTypes[item].type == "date"){
+
+          headers += '<th class="date">' + v  + nn + '</th>';
+
+
+        }
+
+
+        }
+
+      });
+      if (columnMatch == false){
+        headers += '<th>' + v  + '</th>';
+
+      }
+    }else{
+    headers += '<th>' + v + '</th>';
+     }
+    //cells += '<td></td>';
+  });
+
+}
 
 function addTableScrollable(element){
   if (opts.tableMaxSize){
