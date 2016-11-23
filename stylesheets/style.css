@@ -1,5 +1,6 @@
 
-caption{
+.caption{
+    width:31pc;
     text-align: center;
     font-weight: bold;
 }
