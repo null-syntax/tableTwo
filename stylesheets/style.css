@@ -1,4 +1,9 @@
 
+.caption{
+    text-align: center;
+    font-weight: bold;
+}
+
 .btn-primary{
     background-color: #3c8dbc;
     border-color: #367fa9;
