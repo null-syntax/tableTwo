@@ -826,9 +826,6 @@ function createStaticDefaultColumns(element){
 
    function createColumnOptions(element){
 
-
-
-
            $("tr:first", element).find("th").each(function(i,item){
 
 
@@ -841,6 +838,8 @@ function createStaticDefaultColumns(element){
                     }else{
                         size = $(this).closest("tr").find("th").length;
                         if (i == size - 1 && opts.addColumn == true){
+                    }else if(i == size - 1 && opts.removeRow == true){
+
                     }else{
 
                var content = '<div class="form-group column-settings-container">';
