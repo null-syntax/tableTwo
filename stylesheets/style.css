@@ -37,6 +37,12 @@ position: relative;
     color: #333 !important;
 }
 
+.btn-header{
+background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.7);
+}
 
 .page-header{
     color: #fff;
