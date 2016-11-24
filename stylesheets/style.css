@@ -54,11 +54,12 @@ position: relative;
 }
 
 .header-title{
+    padding:2pc;
     font-size: 3.25rem;
 }
 
 .header-tagline{
-        font-size: 1.25rem;
+        font-size: 10px;
 margin-bottom: 2rem;
     font-weight: normal;
     opacity: 0.7;
