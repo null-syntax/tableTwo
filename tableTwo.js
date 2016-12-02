@@ -61,8 +61,12 @@
      createTableCaption(element);
    }
 
-   if (opts.showSubmitButton){
-     createSubmitTable(element);
+   if (opts.addFooter){
+     addFooter(element);
+   }
+
+   if (opts.footerShowSubmitButton){
+     createFooterSubmitTable(element);
    }
 
 
@@ -87,10 +91,6 @@
    });
   }
 
-  if (opts.addFooter){
-    addFooter(element);
-  }
-
   if (opts.tableScrollable){
     addTableScrollable(element);
   }
@@ -99,7 +99,7 @@
 
 function mapColumnOptions(element){
 
-$("tr:first", element).find("th").each(k,v){
+$("tr:first", element).find("th").each(function(k,v){
 
     if (opts.enableCustomColumnTypes){
 
@@ -107,25 +107,58 @@ $("tr:first", element).find("th").each(k,v){
 
     columnMatch = false;
     $.each(opts.columnSettings, function(key,item){
-      if (key == v ){
 
-    columnMatch = true;
+      if (key == $(v).text()){
+
+        columnMatch = true;
 
         if (opts.defaultColumnTypes[item].type == "toggle"){
 
-          vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.defaultColumnTypes[item].off + '"></i></button>';
           nn = '<input type="hidden" class="toggleId" value="' + opts.defaultColumnTypes[item].id + '">';
-          headers += '<th class="toggle">' + nn  + '</th>';
+          $(v).html($(v).text() + nn);
+          $(v).addClass("toggle");
+
+          $("tr", element).find("td:nth-child(" + (k + 1) + ")").each(function(i,cell){
+            toggleState = "";
+            if ($(cell).text() == "true"){
+               toggleState = "on";
+            }else{
+              toggleState = "off";
+            }
+
+            if (opts.showToggleButton){
+              vv = '<button class="btn btn-primary toggleButton toggle-' + toggleState + '">';
+            }else{
+              vv = '<span class="btn toggleButton toggle-' + toggleState + '">';
+            }
+
+            if (toggleState == "on"){
+              vv += '<i class="' + opts.defaultColumnTypes[item].on + '"></i>';
+            }else{
+              vv += '<i class="' + opts.defaultColumnTypes[item].off + '"></i>';
+            }
+
+            if (opts.showToggleButton){
+              vv += '</button>';
+            }else{
+              vv += '</span>';
+            }
+
+            $(cell).html(vv);
+
+
+          });
 
         }else if (opts.defaultColumnTypes[item].type == "select"){
 
           nn = '<input type="hidden" class="selectId" value="' + opts.defaultColumnTypes[item].id + '">';
-          headers += '<th class="select">' + v  + nn + '</th>';
+
+          $(v).html($(v).text() + nn);
+          $(v).addClass("select");
 
         }else if (opts.defaultColumnTypes[item].type == "date"){
 
-          headers += '<th class="date">' + v  + nn + '</th>';
-
+          $(v).addClass("date");
 
         }
 
@@ -133,14 +166,8 @@ $("tr:first", element).find("th").each(k,v){
         }
 
       });
-      if (columnMatch == false){
-        headers += '<th>' + v  + '</th>';
 
-      }
-    }else{
-    headers += '<th>' + v + '</th>';
-     }
-    //cells += '<td></td>';
+    }
   });
 
 }
@@ -216,11 +243,11 @@ function addFooter(element){
 
     $(element).closest(".table-container").find(".table-footer").remove();
 
-    html = '<div class="table-footer"></div>';
+    html = '<div class="table-footer form-inline"></div>';
 
     $(element).closest(".table-container").append(html);
 
-    html = '<div class="input-group footer-left">';
+    html = '<span class="input-group footer-left">';
 
     if (opts.footerAddRowButton){
 
@@ -238,7 +265,7 @@ function addFooter(element){
 
     }
 
-    html += '</div>';
+    html += '</span>';
 
     $(element).closest(".table-container").find(".table-footer").append(html);
 
@@ -399,7 +426,7 @@ function addFooter(element){
         if(i == 0 && opts.showRowId){
 
         }else if (i == totalColumns && opts.addColumn){
-
+        }else if (i == totalColumns && opts.removeRow){
         }else{
 
         if ($(this).hasClass("condensed-hidden")){
@@ -433,7 +460,7 @@ function addFooter(element){
            $(".column-manager-popover").popover();
          }else{
 
-           $(element).append("<caption></caption>");
+           $(element).append('<caption></caption>');
            $("caption", element).append(html);
            $(".column-manager-popover").popover()
          }
@@ -447,6 +474,7 @@ function addFooter(element){
 
 
       $("tr:first", element).find("th").each(function(i,column){
+
         if ($(column).text() == text){
 
           if (val == true){
@@ -540,18 +568,24 @@ sendJsonData(opts.sendJsonUrl,data);
 
     }
 
-  function createSubmitTable(element){
+  function createFooterSubmitTable(element){
 
-    html = '<div class="table-container"></div>';
+    if (!$(element).closest("div").hasClass("table-container")){
+      html = '<div class="table-container"></div>';
 
-    $(element).wrap(html);
+      $(element).wrap(html);
+    }
 
-    html = '<div class="input-group pull-right submit-button">';
+    if($(element).closest("div").find(".table-footer").length < 1){
+      html = '<div class="table-footer"></div>';
+      $(element).after(html);
+    }
+
+    html = '<span class="input-group pull-right submit-button footer-right">';
     html += '<button class="btn btn-primary tableSubmit" style="" >Submit</button>';
-    html += '</div>';
-    html += '</div>';
+    html += '</span>';
 
-    $(".submit-container").append(html);
+    $(element).closest("div").find(".table-footer").append(html);
 
 
 
@@ -700,7 +734,19 @@ function createStaticDefaultColumns(element){
 
                  if (opts.defaultColumnTypes[item].type == "toggle"){
 
-                   vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.defaultColumnTypes[item].off + '"></i></button>';
+                   if (opts.showToggleButton){
+                     vv = '<button class="btn btn-primary toggleButton toggle-off>';
+                   }else{
+                     vv = '<span class="btn toggleButton toggle-off>';
+                   }
+                   vv += '<i class="' + opts.defaultColumnTypes[item].off + '"></i>';
+
+                   if (opts.showToggleButton){
+                     vv += '</button>';
+                   }else{
+                     vv += '</span>';
+                   }
+
                    nn = '<input type="hidden" class="toggleId" value="' + opts.defaultColumnTypes[item].id + '">';
                    headers += '<th class="toggle">' + nn  + '</th>';
 
@@ -759,8 +805,18 @@ function createStaticDefaultColumns(element){
                 if (key == nn ){
               columnMatch = true;
                   if (opts.defaultColumnTypes[item].type == "toggle"){
+                    if (opts.showToggleButton){
+                      vv = '<button class="btn btn-primary toggleButton toggle-off">';
+                    }else{
+                      vv = '<span class="btn toggleButton toggle-off">';
+                    }
+                    vv += '<i class="' + opts.defaultColumnTypes[item].off + '"></i>';
 
-                    vv = '<button class="btn btn-primary toggleButton toggle-off"><i class="' + opts.defaultColumnTypes[item].off + '"></i></button>';
+                    if (opts.showToggleButton){
+                      vv += '</button>';
+                    }else{
+                      vv += '</span>';
+                    }
 
                     nn += '<input type="hidden" class="toggleId" value="' + opts.defaultColumnTypes[item].id + '">';
 
@@ -1086,9 +1142,11 @@ function createStaticDefaultColumns(element){
 
                                 }
 
-
-                              html = '<button class="btn btn-primary toggleButton toggle-off"><i  class="' + item.off + '"></i></button>';
-
+                              if (opts.showToggleButton){
+                                html = '<button class="btn btn-primary toggleButton toggle-off"><i  class="' + item.off + '"></i></button>';
+                              }else{
+                                html = '<span class="btn toggleButton toggle-off"><i  class="' + item.off + '"></i></span>';
+                              }
                               $(element, "tr:first").find("td:nth-child(" + columnId + ")").html(html);
 
 
@@ -1318,6 +1376,7 @@ function createStaticDefaultColumns(element){
 
 
            if (event.which == 13){
+             if(!$(this).closest("tr").hasClass("add-row")){
 
              columnId = $(this).closest("td").index() + 1;
              rowId = $(this).closest("tr").index();
@@ -1343,7 +1402,7 @@ function createStaticDefaultColumns(element){
 
            }
 
-
+         }
        });
 
        $(element).on("click", ".confirm", function(event){
@@ -1395,7 +1454,12 @@ function createStaticDefaultColumns(element){
                 $(item).find("th:first").before(html);
 
             }else{
+              if (opts.centerRowId){
+                html = '<td class="col-xs-1 col-md-1">' + i + '</td>';
+              }else{
                 html = '<td>' + i + '</td>';
+
+              }
                 $(item).find("td:first").before(html);
             }
 
@@ -1499,8 +1563,12 @@ function createStaticDefaultColumns(element){
                 $.extend(opts.defaultColumnTypes, opts.columnTypes);
 
           if (!opts.addColumn){
-            html = '<th class="add-row-header"></th>';
-            $("tr:first", element).find("th:last").after(html);
+            if ($("tr:first", element).find("th:last").hasClass("add-row-header")){
+
+            }else{
+              html = '<th class="add-row-header"></th>';
+              $("tr:first", element).find("th:last").after(html);
+            }
           }
 
 
@@ -1548,7 +1616,12 @@ function createStaticDefaultColumns(element){
 
                   $.each(opts.defaultColumnTypes, function(i,item){
                     if (item.id == id){
+                      if (opts.showToggleButton){
                         html += '<button class="btn btn-primary toggleButton toggle-off"><i class="' + item.off + '" ></i></button>';
+                      }else{
+                        html += '<span class="btn toggleButton toggle-off"><i class="' + item.off + '" ></i></span>';
+                      }
+
                     }
                   });
                     html += '</td>';
@@ -1559,7 +1632,7 @@ function createStaticDefaultColumns(element){
 
 
                 }else{
-                  alert("d");
+                  //alert("d");
 
 
 
@@ -1730,32 +1803,28 @@ function createStaticDefaultColumns(element){
 $.fn.tableTwo.defaults = {
 
     addColumn: true,
-    onColumnAdd: function(e){
-      e.stopPropagation();
+    onColumnAdd: function(){
     },
     addRow: true,
-    onRowAdd: function(e){
-      e.stopPropagation();
+    onRowAdd: function(){
     },
     removeRow:true,
-    onRowRemove: function(e){
-      e.stopPropagation();
+    onRowRemove: function(){
     },
     showRowId:true,
+    centerRowId:true,
     editCells:true,
-    onEditCell:function(e){
-      e.stopPropagation();
+    onEditCell:function(){
     },
     rowClick:false,
-    onRowClick:function(e){
-      e.stopPropagation();
+    onRowClick:function(){
     },
     showColumnOptions:true,
     allowDropdown:true,
     editHeaders:true,
     showTableCaption: true,
     tableCaptionValue: "",
-    showSubmitButton:true,
+    footerShowSubmitButton:true,
     submitUrl:"",
     getJsonData:false,
     getJsonPOSTData: {},
@@ -1773,6 +1842,7 @@ $.fn.tableTwo.defaults = {
     gridSize:"8x4",
     tableMaxSize:false,
     tableScrollable:false,
+    showToggleButton:true,
     //mobileDefaultColumns: [],
         enableCustomColumnTypes: true,
         columnSettings:{},
@@ -1805,23 +1875,29 @@ $.fn.tableTwo.defaults = {
             type:"select",
             values: [ 'created','started','done']
           },
+          contactTypes:{
+            id:5,
+            title:"Contact Types",
+            type:"select",
+            values: [ 'Mobile','Email','SMS']
+          },
           //toggle examples
           star:{
-            id:5,
+            id:6,
             title:"star",
             type:"toggle",
             on:"fa fa-star-o",
             off:"fa fa-star"
           },
           check:{
-            id:6,
+            id:7,
             title:"done",
             type:"toggle",
             on: "fa fa-check",
             off: "fa fa-times"
           },
           switch:{
-            id:7,
+            id:8,
             title:"switch",
             type:"toggle",
             on: "fa fa-toggle-on",
