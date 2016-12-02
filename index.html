@@ -4,267 +4,470 @@
     <meta charset="UTF-8">
     <title>Tabletwo by null-syntax</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="test.js"></script>
+    <script src="https://uxsolutions.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="http://rawgit.com/null-syntax/tableTwo/tableTwo.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://rawgit.com/null-syntax/tableTwo/tableTwo.css">
+    <script src="https://use.fontawesome.com/51f4851eec.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="styke.css" >
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <section class="page-header">
-      <h1 class="project-name">Tabletwo</h1>
-      <h2 class="project-tagline">Creates beautiful responsive tables using jQuery and Bootstrap. Resize your tables, receive or send json data, include custom column types, toggle buttons, dropdown menus and much more. </h2>
-      <a href="https://github.com/null-syntax/tableTwo" class="btn">View on GitHub</a>
-      <a href="https://github.com/null-syntax/tableTwo/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/null-syntax/tableTwo/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+      <div class="fluid-container" >
+    <div class="page-header">
+      <h1 class="header-title">tableTwo</h1>
+      <h2 class="header-tagline">Creates beautiful responsive tables using jQuery and Bootstrap. Resize your tables, receive or send json data, include custom column types, toggle buttons, dropdown menus and much more. </h2>
+      <a href="https://github.com/null-syntax/tableTwo" class="btn btn-header" style="color: rgba(255, 255, 255, 0.7);">View on GitHub</a>
+      <a href="https://github.com/null-syntax/tableTwo/zipball/master" class="btn btn-header" style="color: rgba(255, 255, 255, 0.7);">Download .zip</a>
+      <a href="https://github.com/null-syntax/tableTwo/tarball/master" class="btn btn-header" style="color: rgba(255, 255, 255, 0.7);">Download .tar.gz</a>
+    </div>
+    </div>
 
-    <section class="main-content">
-      <h1>
-<a id="tabletwo" class="anchor" href="#tabletwo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>tableTwo</h1>
+    <div>
 
-<p>TableTwo is a Bootstrap compatible jQuery plugin that easily turns HTML tables into a responsive editable environment.</p>
+    </div>
 
-<p>For tableTwo elements to render the following two files must be included:</p>
+    <div class="fluid-container">
+    <div class="row">
+    <div class="col-md-4 col-md-offset-4" >
 
-<p>tableTwo.js
-  tableTwo.css</p>
+      <h2 class="h2">
+      <a id="tabletwo" class="anchor" href="#tabletwo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>tableTwo</h2>
 
-<p>Tables can then be initiated using jQuery selectors as shown below:</p>
-<script>
+      <p>TableTwo is a Bootstrap compatible jQuery plugin that easily turns HTML tables into a responsive editable environment.</p>
 
-      alert();
-      </script>
-<pre><code>$('#elementToTableify').tableTwo();
-$('.elementsToTableify').tableTwo();
-</code></pre>
+      <h2 class="h2">
+      <a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started</h2>
 
-<h2>
-<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
+      <p>For tableTwo elements to render the following two files must be included from repository above:</p>
 
-<p>Below is a list of minimum and suggested dependencies for using tableTwo. Minimums listed are requirements for tableTwo to render, suggested dependencies are required to enable certain features of tableTwo. If you do not wish to use these features you may not wish to include these dependencies.</p>
+      <pre>
+      tableTwo.js
+      tableTwo.css
+      </pre>
 
-<pre><code>Minimum:
-jQuery (built using 2.2)
-bootstrsap (built using 3.3)
+      <p>Tables can then be initiated using jQuery selectors as shown below:</p>
 
-Suggested:
-Font Awesome (toggle buttons, icons for column options menus)
-bootstrap Datepicker (Date column type)
-</code></pre>
+      <pre>
+      <code>
+      $('#elementToTableify').tableTwo();
+      </code>
+      </pre>
+      <div style="padding-bottom:1pc;">
+      or:
+      </div>
+      <pre>
+      </code>
+      $('.elementsToTableify').tableTwo();
+      </code>
+      </pre>
 
-<p>tableTwo JSON works best using the following html table format:</p>
+      <p>Due to the level of customisation provided by tableTwo it is likely you will need to override atleast some of the default options.</p>
+      <p>This can be achived by passing an object to the element when it is initialised, for example:</p>
 
-<div class="highlight highlight-text-html-basic"><pre>  &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>table-responsive<span class="pl-pds">"</span></span>&gt;
-   &lt;<span class="pl-ent">table</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>table table-condensed<span class="pl-pds">"</span></span>&gt;
-       &lt;<span class="pl-ent">tbody</span>&gt;
-       &lt;/<span class="pl-ent">tbody</span>&gt;
-   &lt;/<span class="pl-ent">table</span>&gt;
-  &lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+      <pre>
+      </code>
+      $('.elementsToTableify').tableTwo({
+      addRow:false,
+      showRowId:true,
+      });
+      </code>
+      </pre>
 
-<p>if using static data tableTwo is farely forgiving with html formatting.</p>
-
-<pre><code>#latest update:
-04/11/2016
-pre-release update, all functions should work as expected but more are being added and functionality may be changed.
-Please see the development list in the readme for more information.
-
-fixed issue with adding columns while using condensed view.
-added default columns builder.
-changed some condensed view settings.
-added more defaults column types.
-added ability for external columns types.
-
-
-added the above to the readme log.
-
-
-
-#currently in development
-date column types - completed
-mobile condensed view - started and added (basic)
-event bindings for functions
-font edit menu
+      <h2 class="h2">
+      <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h2>
+      <p>
+      Below is a number of examples using different options to create tables using tableTwo.
+      The options used to create each example are listed below.
+      <h3 class="h3">
+        <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Simple Table
+      </h3>
+      </p>
+      <div>
+      <div class="table-responsive">
+      <table class="simple-example">
+      <tbody>
+      <tr><th>First Name</th><th>Surname</th><th>Date of Birth</th><th>Contact Method</th><th>Active</th></tr>
+      <tr><td>Mike</td><td>Jones</td><td>14/06/1954</td><td>Phone</td><td>true</td></tr>
+      <tr><td>Jenny</td><td>Simpson</td><td>28/1/1998</td><td>Email</td><td>true</td></tr>
+      <tr><td>Penny</td><td>James</td><td>01/08/1986</td><td>SMS</td><td></td></tr>
+      </tbody>
+      </table>
+      </div>
+    </div>
 
 
-#current development cycle
-active
-</code></pre>
+    <h3>Grid View Example and Callbacks</h3>
+    <p>
+    tableTwo tables can also be easily nested within bootstrap elements, created dynamically using any of the built in callbacks or a combination of both.</p>
+    <p>
+    The example below is a simple table which when clicked, opens a bootstrap modal containing a grid view example:
+    </p>
 
-<h1>
-<a id="options" class="anchor" href="#options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>options</h1>
+    <div class="table-responsive">
+    <table class="dataSheet-Menu">
+    <tbody>
+    <tr><th>Report Name</th><th>Month</th><th>Updated</th></tr>
+    <tr><td>Sales</td><td>December</td><td>11/10/16</td></tr>
+    <tr><td>Sales</td><td>November</td><td>29/11/16</td></tr>
+    <tr><td>Sales</td><td>October</td><td>30/10/16</td></tr>
+    <tr><td>Sales</td><td>September</td><td>30/09/16</td></tr>
+    <tr><td>Sales</td><td>August</td><td>30/08/16</td></tr>
+    <tr><td>Sales</td><td>July</td><td>30/07/16</td></tr>
+    <tr><td>Sales</td><td>June</td><td>30/06/16</td></tr>
+    </tbody>
+    </table>
+    </div>
 
-<p>TableTwo uses a number of default options all of which can be overloaded, these are listed below along with there default setting:</p>
 
-<p>addColumn: true,
+    <!-- Modal -->
+    <div id="dataSheet-sheet" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+          </div>
+          <div class="modal-body">
+            <p>Some text in the modal.</p>
+            <div class="table-responsive">
+            <table class="dataSheet-sheet">
+            <tbody>
+            </tbody>
+            </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <h2>
+    <a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
+
+    tableTwo has the following dependencies, some are listed as minimim requirements and are needed for tableTwo to render. Optional dependencies are required to enable some features of tableTwo.
+    If you don't need these features you do not need to include these dependencies.
+
+
+
+
+<div class="table-responsive">
+  <table class="dependencies-table">
+  <tbody>
+    <tr>
+      <th>Requirement</th><th>Type</th><th>Version</th><th>Required for</th>
+    </tr>
+    <tr>
+      <td>Bootstrap</td><td>Minimum</td><td>3.4</td><td>Core</td>
+    </tr>
+    <tr>
+      <td>jQuery</td><td>Minimum</td><td>2.2</td><td>Core</td>
+    </tr>
+    <tr>
+      <td>Bootstrap Datepicker</td><td>Optional</td><td>n/a</td><td>Date Columns</td>
+    </tr>
+    <tr>
+      <td>Font Awesome</td><td>Optional</td><td>n/a</td><td>Toggle Columns & Icons</td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+
+<h3>Receiving Data</h3>
+<p>
+tableTwo will work with both static and JSON data, by default tableTwo will render a static table into a tableTwo element.
+</p>
+<h4>JSON Data</h4>
+<p>
+When receiving json data the 'getJsonData' flag must be enabled and the 'jsonurl' value set. You can also specify the POST data for the request by passing values to the 'getJsonPOSTData' object:
+
+<pre>
+<code>
+$('#new-table').tableTwo({
+  getJsonData:true,
+  jsonurl: "http://ilove.json.com"
+  getJsonPOSTData{'request': id, 'user': id}
+  });
+</code>
+</pre>
+<p>
+When using JSON data tableTwo will render best receiving an array of objects, a new column header will be generated for each unique key found when iterating through objects in the array.
+</p>
+
+<h2>Options</h2>
+<p>
+Below is a list of tableTwos current options and default settings. Each option can be over written or appended as necessary.
+</p>
+<p>
+A more detailed explanation for some options is given below.
+</p>
+
+<pre>
+addColumn: true,
+onColumnAdd: function(){
+},
 addRow: true,
+onRowAdd: function(){
+},
 removeRow:true,
+onRowRemove: function(){
+},
 showRowId:true,
+centerRowId:true,
 editCells:true,
+onEditCell:function(){
+},
+rowClick:false,
+onRowClick:function(){
+},
 showColumnOptions:true,
 allowDropdown:true,
 editHeaders:true,
 showTableCaption: true,
 tableCaptionValue: "",
-submitTable:false,
+footerShowSubmitButton:true,
 submitUrl:"",
 getJsonData:false,
+getJsonPOSTData: {},
 sendJsonUrl:"",
+sendJsonPOSTid: "",
 jsonurl:"",
-mobileCondensedView: true,
+showCondensedView: true,
+mobileCondensedView: false,
+sendOnChange: false,
+createDefaultColumns:true,
+createDefaultGrid:false,
+defaultColumns:[],
+addFooter:true,
+footerAddRowButton:true,
+gridSize:"8x4",
+tableMaxSize:false,
+tableScrollable:false,
+showToggleButton:true,
 //mobileDefaultColumns: [],
-    enableColumnSettings: true,
-    columnSettings:{"title":"status","budget":"star","project":"switch"},</p>
+    enableCustomColumnTypes: true,
+    columnSettings:{},
+</pre>
 
-<pre><code>columnTypes:{
-  //text example
-  text:{
-    id:1,
-    title: "text",
-    type: "text",
-    value: ""
+<h3>Callbacks</h3>
+<p>
+Callbacks are initiated after manipulation of the element has been completed but before any calls to send functions are completed.
+</p>
+<p>
+For callbacks involing manipulation of a cell, row or column the 'this' object will contain access to the data referenced in the cells affected by the calling function.
+</p>
+<p>
+Currently the sendOnChange function uses AJAX to send a full representation of the table to the url passed to 'sendJsonUrl'.
+</p>
+
+<h4>Creating callbacks</h4>
+<p>
+To create you own custom callback function simple pass you own function to tableTwo when initialising your element:
+</p>
+<pre>
+</code>
+$('#new-table').tableTwo({
+  removeRow:false,
+  showRowId:true,
+  onRowAdd: function(){
+    alert('You added a row containing ' + JSON.stringify(this) + '!');
   },
-  // //select examples
-  // select:{
-  //   id:2,
-  //   title:"select",
-  //   type: "select",
-  //   values: [ '']
-  // },
-  status:{
-    id:3,
-    title:"status",
-    type:"select",
-    values: [ 'created','started','done']
-  },
-  //toggle examples
-  star:{
-    id:4,
-    title:"star",
-    type:"toggle",
-    on:"fa fa-star-o",
-    off:"fa fa-star"
-  },
-  check:{
-    id:5,
-    title:"done",
-    type:"toggle",
-    on: "fa fa-check",
-    off: "fa fa-times"
-  },
-  switch:{
-    id:6,
-    title:"switch",
-    type:"toggle",
-    on: "fa fa-toggle-on",
-    off: "fa fa-toggle-off"
-  }
-}
-</code></pre>
+});
+</code>
+</pre>
 
-<p>To orderload these options use the following format:</p>
+<h4>Adding Column Types</h4>
+<p>
+Custom column types can also be added allowing you to easily add your own custom toggles, select menus and more.
+</p>
+<p>
+First ensure the flag 'enableCustomColumnTypes' is set to true. Then pass an object to 'columnTypes' containing values in the following format:
 
-<pre><code>$('#elementToTableify').tableTwo({addColumn:false);    
-</code></pre>
+<h4>Basic Example</h4>
+<pre>
+<code>
+$('#new-table').tableTwo({
+  columnTypes:{
+    //example of a custom 'text' column
+      text:{            // This is the name of your column type -- UNIQUE
+        id:9,           // must start at 9 or above and be -- UNIQUE
+        title: "text",  // Value displayed to user in menu systems
+        type: "text",   // if overloading existing column type reference it here
+        value: ""       // default value
+      }
+    }
+  });
+</code>
+</pre>
 
-<h1>
-<a id="json" class="anchor" href="#json" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>JSON</h1>
+<h4>Date Column</h4>
 
-<p>One of tableTwo's main features is the ability to receive json data. This can be done by setting the options variable 'options.getJsonData' to true and
-passing a url to the variable 'options.jsonurl'.</p>
+<pre>
+<code>
+  $('#new-table').tableTwo({
+      columnTypes:{
+      //example of a custom date column
+      date:{            // This is the name of your column type -- UNIQUE
+        id:10,          // must start at 9 or above and be -- UNIQUE
+        title: "date",  // Value displayed to user in menu systems
+        type: "date",   // reference 'date' column type
+        value:"now"     // default value
+      },
+    }
+  });
+</code>
+</pre>
 
-<p>Currently the tableTwo plugin automatically parses headers for individual columns and expects to recieve a standard json array containing objects.</p>
+<h4>Select Column</h4>
 
-<h1>
-<a id="mobilecondensedview" class="anchor" href="#mobilecondensedview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>mobileCondensedView</h1>
+<pre>
+  <code>
+    $('#new-table').tableTwo({
+      columnTypes:{
+    //example of a custom select column
+     select:{                 // This is the name of your column type -- UNIQUE
+       id:11,                 // must start at 9 or above and be -- UNIQUE
+       title:"select",        // Value displayed to user in menu systems
+       type: "select",        // reference 'select' column type
+       values: ['']           // default values (array)
+     },
+    // custom 'select' example 1
+    status:{
+      id:12,
+      title:"status",
+      type:"select",
+      values: ['created','started','done']
+    },
+    // custom 'select' example 2
+    contactTypes:{
+      id:13,
+      title:"Contact Types",
+      type:"select",
+      values: ['Mobile','Email','SMS']
+    },
+    }
+  })
+</code>
+</pre>
 
-<p>tableTwo supports hiding of some columns based screensize. This can be achieved by setting the value 'mobileCondensedView' to true.</p>
+<h4>Toggle Column</h4>
+<p>
+When using toggle columns it is easy to customise the appearance of you buttons by passing values to the columnTypes object.
+</p>
+<p>
+When initialising your element you can preset the value of a toggle cell by passing "true" or "false". This works for both static and JSON data.
+</p>
+<p>
+By default toggle columns work using font awesome icons however this can be overwritten by any similar class based icon system.
+</p>
 
-<p>When this is applied a popover menu will be added to the top corner of the table allowing users to hide or show columns when required.</p>
+<pre>
+  <code>
+    $('#new-table').tableTwo({
+      columnTypes:{
+        //example of a custom select column
+        star:{                    // This is the name of your column type -- UNIQUE
+          id:14,                  // must start at 9 or above and be -- UNIQUE
+          title:"star",           // Value displayed to user in menu systems
+          type:"toggle",          // reference 'toggle' column type
+          on:"fa fa-star-o",      // font awesome icon class
+          off:"fa fa-star"        // font awesome icon class
+        },
+        check:{
+          id:15,
+          title:"done",
+          type:"toggle",
+          on: "fa fa-check",
+          off: "fa fa-times"
+        },
+        switch:{
+          id:16,
+          title:"switch",
+          type:"toggle",
+          on: "fa fa-toggle-on",
+          off: "fa fa-toggle-off"
+        }
+      }
+    });
+</code>
+</pre>
 
-<p>some columns can be set to auto remain when loading data on a mobile device. This is done using the option 'mobileDefaultColumns'.</p>
 
-<p>column headers should be passed to this array in the format:</p>
+<h3>User Menus and UI elements</h3>
 
-<pre><code>mobileDefaultColumns: ["example1","example2"],
-</code></pre>
+tableTwo contains a number of user menus and UI elements which can be enabled or disabled as required.
 
-<h1>
-<a id="columntypes" class="anchor" href="#columntypes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>columnTypes</h1>
+<h4>Column Options Menu</h4>
+<p>
+The column options menu can be used to dynamically change the type of columns in a table.
+</p>
+<p>
+It can also be used to change the table header or amend the layout of a column and is opened by clicking the <i class="fa fa-cog"></i> icon in the column header.
+</p>
+This menu can be disabled by setting the 'showColumnOptions' flag to false when initialising the element:
+</p>
+</p>
+When enabled this option overrides the 'editHeaders' option / bindings but provides the same functionality.
+</p>
 
-<p>tableTwo supports the use of custom column types within your tables including:</p>
+<pre>
+<code>
 
-<pre><code>text (input)
-select (dropdown)
-toggle (switch/button)
-</code></pre>
+  $('#new-table').tableTwo({
+    showColumnOptions:false,
+  });
+</code>
+</pre>
 
-<p>default behavoir for editable cells is set to text.</p>
 
-<p>To set a columns type you must first make sure that column type exists. Some example column types are shown below:</p>
+<h4>Footer Menu</h4>
+<p>
+The footer menu can be customised with a number of options adding additional functionality to your table.
+</p>
+<p>
+It can replace or augment the 'addRow' functionality with a bootstrap popover, and also houses the submit button if this option is enabled.
 
-<p>columnTypes:{
-  //text example
-  text:{ -- unique key (column type name)
-    id:1, -- must be unique
-    title: "text", -- descriptor
-    type: "text", -- key
-    value: "" -- value
-  },
-  //select example
-   select:{ -- unique key (column type name)
-     id:2, -- must be unique
-     title:"select", -- descriptor
-     type: "select", -- key
-     values: [''] -- values
-   },
-  status:{
-    id:3, -- must be unique
-    title:"status", -- descriptor
-    type:"select", -- key
-    values: [ 'created','started','done'] -- values
-  },
-  //toggle example
-  star:{
-    id:4, -- must be unique
-    title:"star", -- descriptor
-    type:"toggle", -- key
-    on:"fa fa-star-o", -- value (font fa class)
-    off:"fa fa-star" -- value (font fa class)
-  },
-  //toggle example
-  check:{
-    id:5, -- must be unique
-    title:"done", -- descriptor
-    type:"toggle", -- key
-    on: "fa fa-check", -- value (font fa class)
-    off: "fa fa-times"--  value (font fa class)
-  },
-  //toggle example
-  switch:{
-    id:6,
-    title:"switch",
-    type:"toggle",
-    on: "fa fa-toggle-on",
-    off: "fa fa-toggle-off"
-  }
-}</p>
+<pre>
+<code>
+  $('#new-table').tableTwo({
+    addFooter:true,
+    footerAddRowButton:true,
+    footerShowSubmitButton:true,
+  });
+</code>
+</pre>
 
-<p>When loading data use the following code to match column types to headers:</p>
+<h4>Questions / Bug reporting / Contact</h4>
+<p>
+tableTwo was written by <a href="https://github.com/null-syntax">null-syntax</a> and is currently free for non commercial use.
+</p>
+<p>
+This project is still being currently developed although releases pushed to github are generally expected to be stable.
+</p>
+<p>
+Please report any bugs / feature requests through github I will try and respond promptly.
+</p>
+<p>
+If you wish to use tableTwo for a commercial venture please contact me directly.
+</p>
 
-<p>columnSettings:{"header 1":"column type name","header 2":"column type name","header 3":"column type name"},</p>
-
-<p>For example (using the data above):</p>
-
-<p>columnSettings:{"title":"status","budget":"star","project":"switch"},</p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/null-syntax/tableTwo">Tabletwo</a> is maintained by <a href="https://github.com/null-syntax">null-syntax</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+<footer class="site-footer">
+        <span class="site-footer-owner">Originally the <a href="https://github.com/jasonlong/cayman-theme">Cayman</a> theme </span><span>-- modified by null-syntax</a>.</span>
       </footer>
 
-    </section>
+</div>
+</div>
+</div>
 
-  
+
   </body>
-</html>
